@@ -93,12 +93,12 @@ void mouseReleased() {
 // When the mouse is pressed we. . .
 void mousePressed() {
     //Check to see if the mouse was clicked on the box
-    if(box.contains(mouseX, mouseY)) {
+    if (box.contains(mouseX, mouseY)) {
         // And if so, bind the mouse location to the box with a spring
         spring.bind(mouseX,mouseY,box);
-} else if (box2.contains(mouseX, mouseY)) {
+    } else if (box2.contains(mouseX, mouseY)) {
         spring.bind(mouseX, mouseY, box2);
-}
+    }
 }
 
 void draw() {
@@ -115,7 +115,7 @@ void draw() {
     for (int i = 0; i < boundaries.size(); i++) {
         Boundary wall = (Boundary) boundaries.get(i);
         wall.display();
-}
+    }
     
     //Draw the box
     box.display();
@@ -128,7 +128,7 @@ void draw() {
     Vec2 v = new Vec2();
     Vec2 v2 = new Vec2();
     v = box.getLinearVelocity();
-    v2= box2.getLinearVelocity();
+    v2 = box2.getLinearVelocity();
     textSize(36);
     fill(0);
     text(v.toString(), 50, 50);
@@ -139,7 +139,7 @@ void draw() {
     box.makeStop(90);
     box2.makeStop(90);
     
-    //Call Amplitude control method, tied to the Y position of the specified body
+    //Call Amplitudecontrol method, tied to the Y position of the specified body
     //Need to input the size manually, no big deal, don't want to deal with writing another
     //method to return the body size
     note1.boxAmp(box, 75);
