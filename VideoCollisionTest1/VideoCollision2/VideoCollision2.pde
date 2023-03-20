@@ -1,11 +1,11 @@
 import processing.video.*;
-import java.awt.Point;
+import java.awt.Point; 
 
 Movie colTest; //Pre-recorded Movie File
 
-Box box;
+Box box; //box object [will become a letter later]
 
-boolean locked = false; //Mouse Locked indicator
+boolean locked = false; //Mouse Locked indicator, will be deleted after testing
 
 void setup() {
     size(1280, 720);
@@ -16,6 +16,7 @@ void setup() {
     
     //Instantiate the box
     box = new Box(250,400, 20, 20, 175);
+    box.getCoord();
 }
 
 //Movie Event. Called every new frame
@@ -31,24 +32,16 @@ void mouseReleased() {
     locked = false;
 }
 
-
 void draw() {
     image(colTest,0,0, width, height); // Draw the BG vid
     colTest.loadPixels();
-    
-    //Creating the lookunder window to see if it works
-    box.lookUnder(colTest);
     
     //Attach the mouse, and draw the box. 
     box.attachMouse();
     box.display();
     
-    fill(255);
-    rect(10, 670, 40, 40);
-    
-    PImage u = colTest.get(box.bx, box.by, box.bW, box.bH);
-    image(u, 20, 680);
-    
-    println("collision location is: " + box.collisionPoint());
+    //Print order for collision, will be deleted after testing
+    if (box.collisionPoint() != null) {
+        println("the collision point is: " + box.collisionPoint());
+    }
 }
-
