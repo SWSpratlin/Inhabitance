@@ -32,16 +32,26 @@ void mouseReleased() {
     locked = false;
 }
 
+
 void draw() {
     image(colTest,0,0, width, height); // Draw the BG vid
     colTest.loadPixels();
+    
+    box.lookUnder(colTest);
     
     //Attach the mouse, and draw the box. 
     box.attachMouse();
     box.display();
     
-    //Print order for collision, will be deleted after testing
+    //Testing window for lookUnder, deleted after testing
+    fill(255);
+    rect(10, 670, 40, 40);
+    PImage u = colTest.get(box.bx, box.by, box.bW, box.bH);
+    image(u, 20, 680);
+    
+    //Print collision point, will be deleted after testing
     if (box.collisionPoint() != null) {
         println("the collision point is: " + box.collisionPoint());
     }
 }
+

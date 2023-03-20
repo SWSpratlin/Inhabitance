@@ -2,7 +2,7 @@ class Box{
     
     int bW;
     int bH;
-    int c;
+    private int c;
     int bx;
     int by;
     
@@ -31,8 +31,8 @@ class Box{
         box.updatePixels(); 
     }
     
-    /*Fills a Point Array with the coordinates of the entire box
-    IN THE ORDER they are listed as per the Pixel array */
+    //Fills a Point Array with the coordinates of the entire box
+    //IN THE ORDER they are listed as per the Pixel array
     void getCoord() {
         coord = new ArrayList<Point>();
         for (int y = 0; y < this.bH; y++) {
@@ -49,9 +49,10 @@ class Box{
     
     //Get the center point for the box. Will be used
     //to calculate a vector later on
-    void getCenter() {
+    Point getCenter() {
         int bCw = this.bx + (this.bW / 2);
         int bCh = this.by + (this.bH / 2);
+        return new Point(bCw, bCh);
     }
     
     /*Mouse attachment method, mostly used for testing right now
@@ -79,10 +80,10 @@ class Box{
     /*Method for finding the first white pixel, and it's location
     WITHIN the Box. Will use PVector(?) to apply a vector
     from the relationship to the center. */
-    Point collisionPoint() {  
+    Point collisionPoint() {
         //Search function to comb the "px" array for a white pixel
         for (int i = 0; i < px.size(); i++) { 
-            if (px.get(i) >= 220) { //threshold at 220
+            if (px.get(i) >= 220) { //threshold
                 return coord.get(i);
             }
         }
