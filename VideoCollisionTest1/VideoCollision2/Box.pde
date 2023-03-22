@@ -137,7 +137,7 @@ class Box{
             PVector colPoint = new PVector(collisionX, collisionY);
             acceleration = PVector.sub(centerPoint, colPoint);
             acceleration.normalize();
-            acceleration.mult(0.5);
+            acceleration.mult(2.5);
             
             //SET UP FRICTION
             friction = velocity.get();
