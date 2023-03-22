@@ -5,6 +5,14 @@ Unsure what use anyone else will have for this, but here it is.
 
 CHANGELOG
 
+03/21/2023
+Updated to include VideoCollisionTest1 folder, including the Box class 
+
+See change history for VideoCollision2 for more details about changes. 
+- vector motion, simple collision
+- stable "lookUnder" monitoring
+- optimized PImage pixel array search 
+
 03/13/2023
 Created Repository, added PDE Files and .WAV files to one master folder. 
 
