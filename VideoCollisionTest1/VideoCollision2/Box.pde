@@ -2,10 +2,14 @@ class Box{
     
     int bW; //Sixe parameters
     int bH;
+    
     private int c; //Color alpha value
+    
     int bx; //Corner coordinates, spawn
     int by;
+    
     int threshold = 220; //Threhsold for the search
+    
     int bCx; //Center Coordinates of the Box
     int bCy;
     
@@ -18,8 +22,9 @@ class Box{
     PVector location;
     PVector velocity;
     PVector acceleration;
-    PVector friction;
+    PVector friction = new PVector(0,0);
     float f; //friction coeffecient 
+    float mass = 1.5; //mass, just to find out if it helps.
     
     //Constructor
     Box(int x_, int y_, int sizeW, int sizeH, int bColor) {
@@ -104,8 +109,8 @@ class Box{
                 return coord.get(i);
             } 
         }
-        cPoint = zeroPoint;
-        return zeroPoint;
+        cPoint = null;
+        return null;
     }
     
     /* Beginnings of the collision vector method. 
@@ -122,36 +127,53 @@ class Box{
         Update analogue is will be first so it's the first thing
         to happen when the method is called in draw. */
         //UPDATE
-        this.bx = int(location.x);
-        this.by = int(location.y);
         
         //GET DIRECTIONAL VECTOR
         float centerX = float(bCx);
         float centerY = float(bCy);
-        if (cPoint != zeroPoint) {
+        
+        float f = 0.5;
+        float aMult = 10;
+        int stopTime = 10;
+        float topSpeed = 4;
+        
+        PVector force;
+        PVector dir = new PVector(0,0);
+        
+        if (cPoint != null) {
+            
             float collisionX = float(cPoint.x);
             float collisionY = float(cPoint.y);
-            float f = 0.01;
             
+            //Get collision vecotr
             PVector centerPoint = new PVector(centerX, centerY);
             PVector colPoint = new PVector(collisionX, collisionY);
-            acceleration = PVector.sub(centerPoint, colPoint);
-            acceleration.normalize();
-            acceleration.mult(2.5);
-            
-            //SET UP FRICTION
-            friction = velocity.get();
-            friction.mult( -1);
-            friction.normalize();
-            friction.mult(f);
-            
-            //APPLY FRICTION
-            acceleration.add(friction);
-            
-            location.set(this.bx,this.by);
-            velocity.add(acceleration);
-            location.add(velocity);
+            dir = PVector.sub(centerPoint, colPoint);
+            dir.normalize();
+            dir.mult(aMult);
         }
+        
+        //SET UP FRICTION
+        friction = velocity.get();
+        friction.mult( -1);
+        friction.normalize();
+        friction.mult(f);   
+        
+        //Apply collsition vector to acceleration
+        acceleration.set(dir);
+        
+        //APPLY FRICTION
+        force = PVector.div(friction,mass);   
+        acceleration.add(force);
+        
+        //UPDATE
+        location.set(this.bx,this.by);    
+        velocity.add(acceleration);
+        velocity.limit(topSpeed);
+        location.add(velocity);
+        
+        //UPDATE
+        this.bx = int(location.x);
+        this.by = int(location.y);
     }
-    
 }   

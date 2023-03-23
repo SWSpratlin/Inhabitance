@@ -16,7 +16,7 @@ void setup() {
     colTest.loop();
     
     //Instantiate the box
-    box = new Box(250,400, 20, 20, 175);
+    box = new Box(100, 400, 20, 20, 175);
     
     // Populate coordinate array
     box.getCoord();
@@ -53,11 +53,11 @@ void draw() {
     rect(10, 670, 40, 40);
     PImage u = colTest.get(box.bx, box.by, box.bW, box.bH);
     image(u, 20, 680);
-    box.collisionPoint();
     
     //Print collision point, will be deleted after testing
-    if (box.collisionPoint() != zeroPoint) {
-        println("the collision point is: [" + (box.collisionPoint().x + "," + (box.collisionPoint()).y) + "]");
+    if (box.collisionPoint() != null) {
+        println("the collision point is: [" + (box.collisionPoint().x
+            + "," + (box.collisionPoint()).y) + "]");
     }
     
     box.collisionVector();
