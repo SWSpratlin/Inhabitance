@@ -24,7 +24,7 @@ class Box{
     PVector acceleration;
     PVector friction = new PVector(0,0);
     float f; //friction coeffecient 
-    float mass = 1.5; //mass, just to find out if it helps.
+    float mass = 2; //mass, just to find out if it helps.
     
     //Constructor
     Box(int x_, int y_, int sizeW, int sizeH, int bColor) {
@@ -123,7 +123,7 @@ class Box{
         float centerY = float(bCy);
         
         //Method variable
-        float f = 0.5;
+        float f = 0.25;
         float aMult = 10;
         int stopTime = 10;
         float topSpeed = 4;
