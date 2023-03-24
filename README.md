@@ -5,6 +5,13 @@ Unsure what use anyone else will have for this, but here it is.
 
 CHANGELOG
 
+03/23/2023
+Added Testing Ground folder, reorganized files
+- Added different iterations of VideoCollision for work on both Intel(Laptop) and Apple Silicon(Destkop)
+- Added library files for Box2D and OpenKinect
+- restructured testing grounds for clarity/ease of Use
+- Started using Testing Grounds for the actual purpose. 
+
 03/21/2023
 Updated to include VideoCollisionTest1 folder, including the Box class 
 
