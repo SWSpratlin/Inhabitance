@@ -40,11 +40,10 @@ void draw() {
     image(colTest,0,0, width, height); // Draw the BG vid
     colTest.loadPixels();
     
-    
-    boxes.forEach(Box ::  display);
     for (int i = 0; i < boxes.size(); i++) {
-        Box tempBox = (Box)boxes.get(i);
-        tempBox.lookUnder(colTest);
+        boxes.get(i).lookUnder(colTest);
+        boxes.get(i).display();
+        boxes.get(i).collisionPoint();
+        boxes.get(i).collisionVector();
     }
-    boxes.forEach(Box ::  collisionVector);  
 }
