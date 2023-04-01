@@ -9,7 +9,7 @@ Point zeroPoint;
 
 ArrayList<Box> boxes; //Testing for box arrays
 
-Box box; //box object [will become a letter later
+Box box; //box object
 
 boolean locked = false; //Mouse Locked indicator, will be deleted after testing
 
@@ -18,7 +18,7 @@ void setup() {
     
     boxes = new ArrayList<Box>(10);
     
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 15; i++) {
         Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 15, 150);
         tmpBox.getCoord();
         boxes.add(tmpBox);

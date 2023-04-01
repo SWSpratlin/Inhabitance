@@ -1,16 +1,18 @@
 class Box{
     
-    int bW; //Sixe parameters
+    //X and Y size for the collision of the box
+    int bW;
     int bH;
     
-    private int c; //Color alpha value
-    
-    int bx; //Corner coordinates, spawn
+    //Corner coordinates, determines the location of the box
+    int bx; 
     int by;
     
-    int threshold = 220; //Threhsold for the search
+    //Threhsold for the search to return a collision point
+    int threshold = 220; 
     
-    int bCx; //Center Coordinates of the Box
+    //Center Coordinates of the Box
+    int bCx; 
     int bCy;
     
     PImage box;
@@ -35,8 +37,6 @@ class Box{
         this.bW = sizeW;
         this.bH = sizeH;
         
-        this.c = bColor;
-        
         location = new PVector(bx, by);
         velocity = new PVector(0,0);
         acceleration = new PVector(0,0);
@@ -46,14 +46,14 @@ class Box{
         box = createImage(bW,bH, RGB);
         box.loadPixels();
         for (int i = 0; i < box.pixels.length; i++) {
-            box.pixels[i] = color(c);
+            box.pixels[i] = color(bColor);
         }
         box.updatePixels(); 
     }
     
     //Fills a Point Array with the coordinates of the entire box
     //IN THE ORDER they are listed as per the Pixel array
-    //Call this in SETUP to avoid redrawing the coordinate array every time
+    //Call this in SETUP to avoid redrawing the coordinate array every frame
     void getCoord() {
         coord = new ArrayList<Point>();
         for (int y = 0; y < this.bH; y++) {
@@ -63,7 +63,8 @@ class Box{
         }
     }
     
-    //Display the Box
+    // Display the Box
+    // will be replaced with the generation of an image (glyph) 
     void display() {
         image(box, bx, by);
     }
@@ -122,7 +123,7 @@ class Box{
         float centerX = float(bCx);
         float centerY = float(bCy);
         
-        //Method variable
+        //Method variables
         float f = 0.5;
         float aMult = 10;
         int stopTime = 10;
