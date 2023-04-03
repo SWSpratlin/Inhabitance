@@ -218,4 +218,14 @@ class Box{
         this.bx = int(location.x);
         this.by = int(location.y);
     }
+    
+    //bounce off the edges
+    void edgeBounce() {
+        if (this.bx <= 0 || this.bx + bW >= width) {
+            this.bx = int(random(width));
+        }
+        if (0 >= this.by || this.by + bH >= height) {
+            this.by = int(random(height));
+        }
+    }
 }   
