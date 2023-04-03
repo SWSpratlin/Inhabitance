@@ -172,7 +172,7 @@ class Box{
         float centerY = float(bCy);
         
         //Methodvariables
-        float f = 0.5;
+        float f = 0.25;
         float aMult = 10;
         int stopTime = 10;
         float topSpeed = 4;
