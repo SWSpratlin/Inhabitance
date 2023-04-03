@@ -104,32 +104,80 @@ class Box{
     from the relationship to the center. */
     Point collisionPoint() {
         //Search function to comb the "px" array for a white pixel
-        for (int i = 0; i < px.size(); i++) { 
+        // for (int i = 0; i < px.size(); i++) { 
+        //     if (int(brightness(px.get(i))) >= threshold) {
+        //         cPoint = new Point(coord.get(i));
+        //         return coord.get(i);
+        //     } //}
+        // cPoint = null;
+        // return null;
+        //commented out above to test a new version of this method
+        
+        // Xand Y arrays to create a centroid coordinate 
+        IntList collisionArrayX = new IntList();
+        IntList collisionArrayY = new IntList();
+        
+        // Xand Y sum variables that clear every loop for the average
+        //calculation to take place
+        int sumX = 0;
+        int sumY = 0;
+        
+        //scan the whole px array
+        for (int i = 0; i < px.size(); i++) {
+            // Check if any given pixel is brighter than the threshold
             if (int(brightness(px.get(i))) >= threshold) {
-                cPoint = new Point(coord.get(i));
-                return coord.get(i);
-            } 
+                
+                //pupulate the X and Y arrays with the values from the
+                // coord array. 
+                //this is currently non-functional
+                collisionArrayX.append((coord.get(i).x));
+                collisionArrayY.append((coord.get(i).y));
+            }
+            // Every 10 loops of the for loop, take the average of the array.
+            //This is untested, may need additioanl conditions to properly operate
+            if (i % 10 ==  0) {
+                
+                //Adding the size check here to stop empty arrays from trying to trigger a for loop
+                if (collisionArrayY.size() != 0 && collisionArrayX.size() != 0) {
+                    
+                    // Add each value to the sum, to be divided for the mean
+                    for (int o = 0; o < collisionArrayX.size(); o++) {
+                        sumX += collisionArrayX.get(o);
+                        sumY += collisionArrayY.get(o);
+                    }
+                    
+                    //assign cPoint as the mean of the arrays rather than
+                    // the first bright pixel in each pass                  
+                    cPoint = new Point((sumX / collisionArrayX.size()),(sumY / collisionArrayY.size()));
+                    
+                    //return the centroid for collision purposes
+                    collisionArrayX.clear();
+                    collisionArrayY.clear();
+                    return cPoint;
+                }
+            }
         }
+        //ifthere are no bright pixel, return null
         cPoint = null;
         return null;
     }
     
     /* Beginnings of the collision vector method. 
-    Will need to be called as a function AFTER lookUnder so the 
-    px array is populated, and the collisionPoint method can
-    run successfully. */
+    Willneedto be called as a function AFTER lookUnder so the 
+    px arrayis populated, and the collisionPoint method can
+    run successfully.*/ 
     void collisionVector() {       
         //GET DIRECTIONAL VECTOR
         float centerX = float(bCx);
         float centerY = float(bCy);
         
-        //Method variables
+        //Methodvariables
         float f = 0.5;
         float aMult = 10;
         int stopTime = 10;
         float topSpeed = 4;
         
-        //Method objects
+        //Methodobjects
         PVector force;
         PVector dir = new PVector(0,0);
         
@@ -147,7 +195,7 @@ class Box{
             dir.mult(aMult);
         }
         
-        //SET UP FRICTION
+        //SET UPFRICTION
         friction = velocity.get();
         friction.mult( -1);
         friction.normalize();
@@ -166,7 +214,7 @@ class Box{
         velocity.limit(topSpeed);
         location.add(velocity);
         
-        //UPDATE POSITION
+        //UPDATEPOSITION
         this.bx = int(location.x);
         this.by = int(location.y);
     }

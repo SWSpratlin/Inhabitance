@@ -13,7 +13,7 @@ Point zeroPoint;
 // Depth image
 PImage depthImg;
 float minDepth =  300;
-float maxDepth = 900;
+float maxDepth = 800;
 
 Kinect kinect;
 
@@ -33,8 +33,11 @@ void setup() {
     
     boxes = new ArrayList<Box>(10);
     
-    //Populate coordinate array for each box
-    boxes.forEach(Box :: getCoord);
+    for (int i = 0; i < 15; i++) {
+        Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 15, 150);
+        tmpBox.getCoord();
+        boxes.add(tmpBox);
+    }
     
     //Blank image
     depthImg = new PImage(kinect.width, kinect.height);
@@ -63,11 +66,11 @@ void draw() {
     depthImg.updatePixels();
     image(depthImg, 0, 0);
     
-    boxes.forEach(Box ::  display);
     for (int i = 0; i < boxes.size(); i++) {
-        Box tempBox = (Box)boxes.get(i);
-        tempBox.lookUnder(depthImg);
+        boxes.get(i).lookUnder(depthImg);
+        boxes.get(i).display();
+        boxes.get(i).collisionPoint();
+        boxes.get(i).collisionVector();
     }
-    boxes.forEach(Box ::  collisionVector);
     
 }
