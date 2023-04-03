@@ -19,7 +19,8 @@ Kinect kinect;
 
 ArrayList<Box> boxes;
 
-Box box; //box object [will become a letter later]
+//Box object spawns a letter
+Box box;
 
 boolean locked = false; //Mouse Locked indicator, will be deleted after testing
 
@@ -46,6 +47,21 @@ void setup() {
     zeroPoint = new Point(0,0);
 }
 
+void keyPressed() {
+    if (keyCode == RIGHT) {
+        maxDepth += 50;
+    }
+    if (keyCode == LEFT) {
+        maxDepth -= 50;
+    }
+    if (keyCode == UP) {
+        minDepth += 50;
+    }
+    if (keyCode == DOWN) {
+        minDepth -= 50;
+    }
+}
+
 void draw() {
     
     image(kinect.getDepthImage(), 0, 0);
@@ -69,6 +85,7 @@ void draw() {
     for (int i = 0; i < boxes.size(); i++) {
         boxes.get(i).lookUnder(depthImg);
         boxes.get(i).display();
+        boxes.get(i).edgeBounce();
         boxes.get(i).collisionPoint();
         boxes.get(i).collisionVector();
     }

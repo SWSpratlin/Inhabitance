@@ -14,12 +14,13 @@ Box box; //box object
 boolean locked = false; //Mouse Locked indicator, will be deleted after testing
 
 void setup() {
-    size(1280,720);
+    size(1280, 720);
+    surface.setResizable(true);
     
     boxes = new ArrayList<Box>(10);
     
     for (int i = 0; i < 15; i++) {
-        Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 15, 150);
+        Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 15, 0);
         tmpBox.getCoord();
         boxes.add(tmpBox);
     }
@@ -34,11 +35,20 @@ void setup() {
 // Movie Event.Called every new frame
 void movieEvent(Movie colTest) {
     colTest.read();
+    
+}
+
+void mouseReleased() {
+    for (int i = 0; i < boxes.size(); i++) {
+        boxes.get(i).bx = int(random(width));
+        boxes.get(i).by = int(random(height));
+    }
 }
 
 void draw() {
     image(colTest,0,0, width, height); // Draw the BG vid
     colTest.loadPixels();
+    
     
     for (int i = 0; i < boxes.size(); i++) {
         boxes.get(i).lookUnder(colTest);

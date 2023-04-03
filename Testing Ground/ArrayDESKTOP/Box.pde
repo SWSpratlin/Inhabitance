@@ -19,12 +19,15 @@ class Box{
     IntList px;
     ArrayList<Point> coord;
     Point cPoint; //DISTINCT FROM THE METHOD for internal usage.
+    char letter;
     
     //objects for any movement related methods
     PVector location;
     PVector velocity;
     PVector acceleration;
     PVector friction = new PVector(0,0);
+    PVector zeroVec = new PVector(0,0); //zero vector for reference 
+    
     float f; //friction coeffecient 
     float mass = 1.5; //mass, just to find out if it helps.
     
@@ -44,9 +47,12 @@ class Box{
         //Create PImage for the Box?
         imageMode(CORNER);
         box = createImage(bW,bH, RGB);
+        fill(170);
+        letter = char(int(random(65, 65 + 24)));
         box.loadPixels();
+        colorMode(HSB);
         for (int i = 0; i < box.pixels.length; i++) {
-            box.pixels[i] = color(bColor);
+            box.pixels[i] = color(bColor, 0, 0, 255);
         }
         box.updatePixels(); 
     }
@@ -67,6 +73,8 @@ class Box{
     // will be replaced with the generation of an image (glyph) 
     void display() {
         image(box, bx, by);
+        textSize(30);
+        text(letter, bx,(by + bH));
     }
     
     //Get the center point for the box. Will be used
@@ -103,15 +111,6 @@ class Box{
     WITHIN the Box. Will use PVector(?) to apply a vector
     from the relationship to the center. */
     Point collisionPoint() {
-        //Search function to comb the "px" array for a white pixel
-        // for (int i = 0; i < px.size(); i++) { 
-        //     if (int(brightness(px.get(i))) >= threshold) {
-        //         cPoint = new Point(coord.get(i));
-        //         return coord.get(i);
-        //     } //}
-        // cPoint = null;
-        // return null;
-        //commented out above to test a new version of this method
         
         // Xand Y arrays to create a centroid coordinate 
         IntList collisionArrayX = new IntList();
@@ -223,9 +222,11 @@ class Box{
     void edgeBounce() {
         if (this.bx <= 0 || this.bx + bW >= width) {
             this.bx = int(random(width));
+            velocity.set(0,0);
         }
         if (0 >= this.by || this.by + bH >= height) {
             this.by = int(random(height));
+            velocity.set(0,0);
         }
     }
 }   

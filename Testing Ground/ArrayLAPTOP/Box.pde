@@ -1,28 +1,33 @@
 class Box{
     
-    int bW; //Sixe parameters
+    //X and Y size for the collision of the box
+    int bW;
     int bH;
     
-    private int c; //Color alpha value
-    
-    int bx; //Corner coordinates, spawn
+    //Corner coordinates, determines the location of the box
+    int bx; 
     int by;
     
-    int threshold = 220; //Threhsold for the search
+    //Threhsold for the search to return a collision point
+    int threshold = 220; 
     
-    int bCx; //Center Coordinates of the Box
+    //Center Coordinates of the Box
+    int bCx; 
     int bCy;
     
     PImage box;
     IntList px;
     ArrayList<Point> coord;
     Point cPoint; //DISTINCT FROM THE METHOD for internal usage.
+    char letter;
     
     //objects for any movement related methods
     PVector location;
     PVector velocity;
     PVector acceleration;
     PVector friction = new PVector(0,0);
+    PVector zeroVec = new PVector(0,0); //zero vector for reference 
+    
     float f; //friction coeffecient 
     float mass = 1.5; //mass, just to find out if it helps.
     
@@ -35,8 +40,6 @@ class Box{
         this.bW = sizeW;
         this.bH = sizeH;
         
-        this.c = bColor;
-        
         location = new PVector(bx, by);
         velocity = new PVector(0,0);
         acceleration = new PVector(0,0);
@@ -44,16 +47,19 @@ class Box{
         //Create PImage for the Box?
         imageMode(CORNER);
         box = createImage(bW,bH, RGB);
+        fill(170);
+        letter = char(int(random(65, 65 + 24)));
         box.loadPixels();
+        colorMode(HSB);
         for (int i = 0; i < box.pixels.length; i++) {
-            box.pixels[i] = color(c);
+            box.pixels[i] = color(bColor, 0, 0, 255);
         }
         box.updatePixels(); 
     }
     
     //Fills a Point Array with the coordinates of the entire box
     //IN THE ORDER they are listed as per the Pixel array
-    //Call this in SETUP to avoid redrawing the coordinate array every time
+    //Call this in SETUP to avoid redrawing the coordinate array every frame
     void getCoord() {
         coord = new ArrayList<Point>();
         for (int y = 0; y < this.bH; y++) {
@@ -63,9 +69,12 @@ class Box{
         }
     }
     
-    //Display the Box
+    // Display the Box
+    // will be replaced with the generation of an image (glyph) 
     void display() {
         image(box, bx, by);
+        textSize(30);
+        text(letter, bx,(by + bH));
     }
     
     //Get the center point for the box. Will be used
@@ -102,43 +111,76 @@ class Box{
     WITHIN the Box. Will use PVector(?) to apply a vector
     from the relationship to the center. */
     Point collisionPoint() {
-        //Search function to comb the "px" array for a white pixel
-        for (int i = 0; i < px.size(); i++) { 
+        
+        // Xand Y arrays to create a centroid coordinate 
+        IntList collisionArrayX = new IntList();
+        IntList collisionArrayY = new IntList();
+        
+        // Xand Y sum variables that clear every loop for the average
+        //calculation to take place
+        int sumX = 0;
+        int sumY = 0;
+        
+        //scan the whole px array
+        for (int i = 0; i < px.size(); i++) {
+            // Check if any given pixel is brighter than the threshold
             if (int(brightness(px.get(i))) >= threshold) {
-                cPoint = new Point(coord.get(i));
-                return coord.get(i);
-            } 
+                
+                //pupulate the X and Y arrays with the values from the
+                // coord array. 
+                //this is currently non-functional
+                collisionArrayX.append((coord.get(i).x));
+                collisionArrayY.append((coord.get(i).y));
+            }
+            // Every 10 loops of the for loop, take the average of the array.
+            //This is untested, may need additioanl conditions to properly operate
+            if (i % 10 ==  0) {
+                
+                //Adding the size check here to stop empty arrays from trying to trigger a for loop
+                if (collisionArrayY.size() != 0 && collisionArrayX.size() != 0) {
+                    
+                    // Add each value to the sum, to be divided for the mean
+                    for (int o = 0; o < collisionArrayX.size(); o++) {
+                        sumX += collisionArrayX.get(o);
+                        sumY += collisionArrayY.get(o);
+                    }
+                    
+                    //assign cPoint as the mean of the arrays rather than
+                    // the first bright pixel in each pass                  
+                    cPoint = new Point((sumX / collisionArrayX.size()),(sumY / collisionArrayY.size()));
+                    
+                    //return the centroid for collision purposes
+                    collisionArrayX.clear();
+                    collisionArrayY.clear();
+                    return cPoint;
+                }
+            }
         }
+        //ifthere are no bright pixel, return null
         cPoint = null;
         return null;
     }
     
     /* Beginnings of the collision vector method. 
-    Will need to be called as a function AFTER lookUnder so the 
-    px array is populated, and the collisionPoint method can
-    run successfully. */
-    void collisionVector() {
-        
-        /* since I'm writing basically all the physics and
-        forces that happen in this single method, I'm gonna
-        just do it all at once, call this method in draw[], 
-        and call it a day. Hopefully it reloads itself. 
-        
-        Update analogue is will be first so it's the first thing
-        to happen when the method is called in draw. */
-        
+    Willneedto be called as a function AFTER lookUnder so the 
+    px arrayis populated, and the collisionPoint method can
+    run successfully.*/ 
+    void collisionVector() {       
         //GET DIRECTIONAL VECTOR
         float centerX = float(bCx);
         float centerY = float(bCy);
         
-        float f = 0.5;
+        //Methodvariables
+        float f = 0.25;
         float aMult = 10;
         int stopTime = 10;
         float topSpeed = 4;
         
+        //Methodobjects
         PVector force;
         PVector dir = new PVector(0,0);
         
+        //Apply the force ONLY if there is a collision happening
         if (cPoint != null) {
             
             float collisionX = float(cPoint.x);
@@ -152,7 +194,7 @@ class Box{
             dir.mult(aMult);
         }
         
-        //SET UP FRICTION
+        //SET UPFRICTION
         friction = velocity.get();
         friction.mult( -1);
         friction.normalize();
@@ -171,8 +213,20 @@ class Box{
         velocity.limit(topSpeed);
         location.add(velocity);
         
-        //UPDATE POSITION
+        //UPDATEPOSITION
         this.bx = int(location.x);
         this.by = int(location.y);
+    }
+    
+    //bounce off the edges
+    void edgeBounce() {
+        if (this.bx <= 0 || this.bx + bW >= width) {
+            this.bx = int(random(width));
+            velocity.set(0,0);
+        }
+        if (0 >= this.by || this.by + bH >= height) {
+            this.by = int(random(height));
+            velocity.set(0,0);
+        }
     }
 }   
