@@ -46,7 +46,7 @@ class Box{
         
         //Create PImage for the Box?
         imageMode(CORNER);
-        box = createImage(bW,bH, RGB);
+        box = createImage(bW,bH, HSB);
         fill(170);
         letter = char(int(random(65, 65 + 24)));
         box.loadPixels();

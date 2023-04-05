@@ -38,7 +38,7 @@ void setup() {
         Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 15, 150);
         tmpBox.getCoord();
         boxes.add(tmpBox);
-    }
+    } //calforentry
     
     //Blank image
     depthImg = new PImage(width, height);

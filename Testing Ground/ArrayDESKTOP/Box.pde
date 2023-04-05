@@ -46,13 +46,12 @@ class Box{
         
         //Create PImage for the Box?
         imageMode(CORNER);
-        box = createImage(bW,bH, RGB);
+        box = createImage(bW,bH, HSB);
         fill(170);
         letter = char(int(random(65, 65 + 24)));
         box.loadPixels();
-        colorMode(HSB);
         for (int i = 0; i < box.pixels.length; i++) {
-            box.pixels[i] = color(bColor, 0, 0, 255);
+            box.pixels[i] = color(bColor, 0, 0, 0);
         }
         box.updatePixels(); 
     }
@@ -183,12 +182,9 @@ class Box{
         //Apply the force ONLY if there is a collision happening
         if (cPoint != null) {
             
-            float collisionX = float(cPoint.x);
-            float collisionY = float(cPoint.y);
-            
             //Get collision vecotr
             PVector centerPoint = new PVector(centerX, centerY);
-            PVector colPoint = new PVector(collisionX, collisionY);
+            PVector colPoint = new PVector(cPoint.x, cPoint.y);
             dir = PVector.sub(centerPoint, colPoint);
             dir.normalize();
             dir.mult(aMult);
