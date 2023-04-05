@@ -2,6 +2,7 @@
 //Kinect version is in VideoCollision2
 
 import processing.video.*;
+import processing.sound.*;
 import java.awt.Point; 
 
 Movie colTest; //Pre-recorded Movie File
@@ -26,7 +27,7 @@ void setup() {
     }
     
     //Set up Movie Player, begin playing the file in the background
-    colTest = new Movie(this, "BW_Collision.mov");
+    colTest = new Movie(this, "BW_Collision_Three.mov");
     colTest.loop();
     
     zeroPoint = new Point(0,0);
