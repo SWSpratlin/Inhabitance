@@ -156,7 +156,7 @@ class Box{
                 }
             }
         }
-        //ifthere are no bright pixel, return null
+        //if there are no bright pixel, return null
         cPoint = null;
         return null;
     }

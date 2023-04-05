@@ -41,10 +41,17 @@ void setup() {
     }
     
     //Blank image
-    depthImg = new PImage(kinect.width, kinect.height);
+    depthImg = new PImage(width, height);
     
     //ZeroPoint for reference
     zeroPoint = new Point(0,0);
+}
+
+void mouseReleased() {
+    for (int i = 0; i < boxes.size(); i++) {
+        boxes.get(i).bx = int(random(width));
+        boxes.get(i).by = int(random(height));
+    }
 }
 
 void keyPressed() {
@@ -80,7 +87,7 @@ void draw() {
     
     //Draw the thresholded image
     depthImg.updatePixels();
-    image(depthImg, 0, 0);
+    image(depthImg, 0, 0, width, height);
     
     for (int i = 0; i < boxes.size(); i++) {
         boxes.get(i).lookUnder(depthImg);
