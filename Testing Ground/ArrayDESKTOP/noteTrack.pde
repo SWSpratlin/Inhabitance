@@ -6,6 +6,8 @@ class noteTrack{
     // call this class in the Box constructor
     // instatiate the sounds in the main*
     
+    float variableAmp;
+    
     SoundFile note;
     noteTrack() {
         
