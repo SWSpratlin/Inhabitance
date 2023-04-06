@@ -5,6 +5,13 @@ Unsure what use anyone else will have for this, but here it is.
 
 CHANGELOG
 
+04/05/2023
+Added SimpleTest sketch for easier testing
+- Fixed collision detection (mostly)
+- Fixed Edge Bounce method to actually function
+- added Ramdon letter generation to the Box class
+- Started writing Sound class
+
 03/23/2023
 Added Testing Ground folder, reorganized files
 - Added different iterations of VideoCollision for work on both Intel(Laptop) and Apple Silicon(Destkop)
