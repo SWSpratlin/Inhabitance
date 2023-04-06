@@ -4,7 +4,7 @@ import java.awt.Point;
 //Create a PImage that will color the pixels around the mouse
 PImage mouseLight;
 
-//Zero out mouse class to start
+//Zero out mouse location variable to start
 int mouseLoc = 0;
 
 //Call the Box Array
@@ -17,11 +17,11 @@ void setup() {
     //set BG color
     background(0);
     
-    //intialize the box array
-    boxes = new ArrayList<Box>(20);
-    
     //Set number of boxes to spawn
     int boxNumber = 40;
+    
+    //intialize the box array
+    boxes = new ArrayList<Box>(boxNumber);
     
     //initialize the boxes
     for (int i = 0; i < boxNumber; i++) {
@@ -34,12 +34,12 @@ void setup() {
     mouseLight = new PImage(width, height);
     mouseLight.loadPixels();
     for (int i = 0; i < mouseLight.pixels.length; i++) {
-        mouseLight.pixels[i] = color(180);
+        mouseLight.pixels[i] = color(0);
     }
     mouseLight.updatePixels();
 }
 
-//Reset function for mouse click
+//Reset function for mouse click. Also randomizes letters
 void mouseReleased() {
     for (int i = 0; i < boxes.size(); i++) {
         boxes.get(i).bx = int(random(width));
@@ -50,7 +50,7 @@ void mouseReleased() {
 
 void draw() {
     //Draw white circle around the mouse
-    //copy/paste/adjsut from "flashlight" Daniel Schiffman example
+    //copy/paste/adjust from "flashlight" Daniel Schiffman example
     //Not important, will be replaced with Kinect Image
     image(mouseLight, 0,0);
     mouseLight.loadPixels();

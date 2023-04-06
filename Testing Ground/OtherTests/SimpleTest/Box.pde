@@ -112,7 +112,10 @@ class Box{
     
     /*Method for finding the first white pixel, and it's location
     WITHIN the Box. Will use PVector(?) to apply a vector
-    from the relationship to the center. */
+    from the relationship to the center. 
+    
+    Must be called in DRAW for collisionVector to be 
+    functional, preferably before collisionVector*/
     Point collisionPoint() {
         
         // Xand Y arrays to create a centroid coordinate 
@@ -134,9 +137,9 @@ class Box{
                 collisionArrayX.append((coord.get(i).x));
                 collisionArrayY.append((coord.get(i).y));
             }
-            // Every 10 loops of the for loop, take the average of the array.
-            //This is untested, may need additioanl conditions to properly operate
-            if (i % 10 ==  0) {
+            // Everytime the for loop goes through 2 rows of the Box, check for collision. Adding the 
+            // row calculation makes the collisions more stable and intuitive
+            if (i % (this.bW * 2) ==  0) {
                 
                 //Adding the size check here to stop empty arrays from trying to trigger a for loop
                 if (collisionArrayY.size() != 0 && collisionArrayX.size() != 0) {
@@ -148,7 +151,7 @@ class Box{
                     }
                     
                     //assign cPoint as the mean of the arrays rather than
-                    // the first bright pixel in each pass                  
+                    // the first bright pixel in each pass. normalizes collision vector                
                     cPoint = new Point((sumX / collisionArrayX.size()),(sumY / collisionArrayY.size()));
                     
                     //return the centroid for collision purposes
@@ -158,7 +161,8 @@ class Box{
                 }
             }
         }
-        //ifthere are no bright pixel, return null
+        
+        //if there are no bright pixels, return null
         cPoint = null;
         return null;
     }
@@ -189,7 +193,7 @@ class Box{
         //Apply the force ONLY if there is a collision happening
         if (cPoint != null) {
             
-            //Get collision vecotr
+            //Get collision vector
             PVector colPoint = new PVector(cPoint.x, cPoint.y);
             PVector centerPoint = new PVector(bCx, bCy);
             
@@ -235,14 +239,14 @@ class Box{
         float lowThresh = -0.03;
         float highThresh = 0.03;
         
-        //lotta && statememtns to find out if 2 values are within a range
+        //lotta && statements to find out if 2 values are within a range
         if (lowThresh <= velocity.x && velocity.x <= highThresh && lowThresh <= velocity.y && velocity.y <= highThresh) {
             velocity.set(0,0);
         }
         
     }
     
-    //bounce off the edges (now functional)
+    //bounce off the edges
     void edgeBounce() {
         //Check if the box is on the edge (same for all)
         if (this.bx <= 0) {
