@@ -18,8 +18,8 @@ class Box{
     PImage box; //Box for collision detection area
     IntList px; //Array for collision detection
     ArrayList<Point> coord; //Coordinate array for Vector generation
-    Point cPoint; //DISTINCT FROM THE METHOD for internal usage.
-    char letter; //Random letter variable
+    Point cPoint; //Point that feeds from collisionPoint into collisionVector.
+    char letter; //Random letter variable, global so it can change
     
     //objects for any movement related methods
     PVector location;
@@ -71,6 +71,7 @@ class Box{
     //IN THE ORDER they are listed as per the Pixel array
     //Call this in SETUP to avoid redrawing the coordinate array every frame
     void getCoord() {
+        
         //initialize coordinate array
         coord = new ArrayList<Point>();
         
@@ -87,6 +88,7 @@ class Box{
     
     // Display the Box(if visible) and Letter
     void display() {
+        
         // Call box image. Necessary for loadPixels() later to work
         image(box, bx, by);
         
@@ -96,15 +98,14 @@ class Box{
         text(letter, bx,(by + bH));
     }
     
-    /* Look Under function. Used for examining the pixels under
-    the box. Will need to figure out how to deciper the data
-    and perform a function depending on the result
+    /* Look Under function. Used for examining the pixels under the box. 
     
-    Must be called in DRAW for any methods that reference
-    the px[] array to work*/
+    Must be called in DRAW for any methods that reference the px[] array to work*/
     void lookUnder(PImage p) {
+        
         //Generate PImage (and therefore a pixels array) for the space under the box
         PImage r = p.get(this.bx, this.by, this.bW, this.bH);
+        
         //create pixels array that can be referenced 
         px = new IntList();
         px.append(r.pixels);
@@ -248,8 +249,10 @@ class Box{
     
     //bounce off the edges
     void edgeBounce() {
+        
         //Check if the box is on the edge (same for all)
         if (this.bx <= 0) {
+            
             //set location to the lower bound, invert and multiply velocity to 
             //avoid getting stuck on the eges
             this.bx = 0;
