@@ -87,12 +87,12 @@ class Box{
     /*Mouse attachment method, mostly used for testing right now
     while I don't have a live feed. Probably won't ned, but
     I'll keep it in. */
-    void attachMouse() {
-        if (locked) {
-            this.bx = mouseX;
-            this.by = mouseY;
-        }
-    }
+    // void attachMouse() {
+    //     if (locked) {
+    //         this.bx = mouseX;
+    //         this.by = mouseY;
+    //     }
+// }
     
     /* Look Under function. Used for examining the pixels under
     the box. Will need to figure out how to deciper the data

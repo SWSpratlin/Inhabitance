@@ -53,9 +53,9 @@ void draw() {
     
     for (int i = 0; i < boxes.size(); i++) {
         boxes.get(i).lookUnder(colTest);
-        boxes.get(i).display();
-        boxes.get(i).edgeBounce();
         boxes.get(i).collisionPoint();
         boxes.get(i).collisionVector();
+        boxes.get(i).edgeBounce();
+        boxes.get(i).display();
     }
 }
