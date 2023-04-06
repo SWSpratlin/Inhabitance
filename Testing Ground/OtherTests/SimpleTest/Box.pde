@@ -51,7 +51,7 @@ class Box{
         letter = char(int(random(65, 65 + 24)));
         box.loadPixels();
         for (int i = 0; i < box.pixels.length; i++) {
-            box.pixels[i] = color(bColor, 0, 0, 0);
+            box.pixels[i] = color(bColor, 255, 255, 255);
         }
         box.updatePixels(); 
     }
