@@ -2,7 +2,7 @@
 import java.awt.Point; 
 
 //Create a PImage that will color the pixels around the mouse
-PImage mouseBox;
+PImage mouseLight;
 
 //Zero out mouse class to start
 int mouseLoc = 0;
@@ -20,21 +20,23 @@ void setup() {
     //intialize the box array
     boxes = new ArrayList<Box>(20);
     
-    int boxNumber = 20;
+    //Set number of boxes to spawn
+    int boxNumber = 40;
+    
     //initialize the boxes
     for (int i = 0; i < boxNumber; i++) {
-        Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 21, 0);
+        Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 25, 0);
         tmpBox.getCoord();
         boxes.add(tmpBox);
     }
     
-    //initialize the PImage
-    mouseBox = new PImage(width, height);
-    mouseBox.loadPixels();
-    for (int i = 0; i < mouseBox.pixels.length; i++) {
-        mouseBox.pixels[i] = color(180);
+    //initialize the mouseLight PImage
+    mouseLight = new PImage(width, height);
+    mouseLight.loadPixels();
+    for (int i = 0; i < mouseLight.pixels.length; i++) {
+        mouseLight.pixels[i] = color(180);
     }
-    mouseBox.updatePixels();
+    mouseLight.updatePixels();
 }
 
 //Reset function for mouse click
@@ -47,34 +49,32 @@ void mouseReleased() {
 }
 
 void draw() {
-    image(mouseBox, 0,0);
-    
     //Draw white circle around the mouse
     //copy/paste/adjsut from "flashlight" Daniel Schiffman example
     //Not important, will be replaced with Kinect Image
-    mouseBox.loadPixels();
+    image(mouseLight, 0,0);
+    mouseLight.loadPixels();
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             int loc = x + y * width;
-            float b = alpha(mouseBox.pixels[loc]);
+            float b = alpha(mouseLight.pixels[loc]);
             float maxDist = 50;
             float d = dist(x,y,mouseX,mouseY);
             float adjustBrightness = 255 * (maxDist - d) / maxDist;
             b *= adjustBrightness;
             b = constrain(b, 0, 255);
             color c = color(b);
-            mouseBox.pixels[loc] = c;
+            mouseLight.pixels[loc] = c;
         }
     }
-    mouseBox.updatePixels();
+    mouseLight.updatePixels();
     
     //Apply methods to each box in the array
     for (int i = 0; i < boxes.size(); i++) {
-        boxes.get(i).lookUnder(mouseBox);
+        boxes.get(i).lookUnder(mouseLight);
         boxes.get(i).collisionPoint();
         boxes.get(i).collisionVector();
         boxes.get(i).edgeBounce();
         boxes.get(i).display();
     }
-    
 }
