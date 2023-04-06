@@ -12,7 +12,7 @@ ArrayList<Box> boxes;
 
 void setup() {
     //Set size, 1280
-    size(1280, 720);
+    size(1280,720);
     
     //set BG color
     background(0);
@@ -23,7 +23,7 @@ void setup() {
     int boxNumber = 20;
     //initialize the boxes
     for (int i = 0; i < boxNumber; i++) {
-        Box tmpBox = new Box(int(random(width)), int(random(height)), 21, 21, 0);
+        Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 21, 0);
         tmpBox.getCoord();
         boxes.add(tmpBox);
     }
