@@ -251,7 +251,7 @@ class Box{
     void edgeBounce() {
         
         //Check if the box is on the edge (same for all)
-        if (this.bx <= 0) {
+        if (this.bx < 0) {
             
             //set location to the lower bound, invert and multiply velocity to 
             //avoid getting stuck on the eges
@@ -261,7 +261,7 @@ class Box{
             this.bx = width - bW;
             velocity.x *= -2;
         }
-        if (0 >= this.by) {
+        if (this.by < 0) {
             this.by = 0;
             velocity.y *= -2;
         } else if (this.by + bH >= height) {
