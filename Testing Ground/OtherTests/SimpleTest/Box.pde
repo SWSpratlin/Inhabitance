@@ -168,10 +168,6 @@ class Box{
     run successfully.*/ 
     void collisionVector() {       
         
-        //Pull Center point, should be 0,0 
-        float centerX = float(bCx);
-        float centerY = float(bCy);
-        
         //Method variables.
         //Friction coeffecient. Change from between 0.01 and 0.5 for best results
         float f = 0.2;
@@ -194,9 +190,8 @@ class Box{
         if (cPoint != null) {
             
             //Get collision vecotr
-            //PVector centerPoint = new PVector(centerX, centerY);
             PVector colPoint = new PVector(cPoint.x, cPoint.y);
-            PVector centerPoint = new PVector(centerX, centerY);
+            PVector centerPoint = new PVector(bCx, bCy);
             
             //Calculate the direction between the center point and Collision Point
             dir = PVector.sub(centerPoint, colPoint);
