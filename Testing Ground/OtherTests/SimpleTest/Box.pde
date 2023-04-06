@@ -138,6 +138,7 @@ class Box{
                 collisionArrayX.append((coord.get(i).x));
                 collisionArrayY.append((coord.get(i).y));
             }
+            
             // Everytime the for loop goes through 2 rows of the Box, check for collision. Adding the 
             // row calculation makes the collisions more stable and intuitive
             if (i % (this.bW * 2) ==  0) {
