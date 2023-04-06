@@ -1,10 +1,15 @@
+//Import Point class, important
 import java.awt.Point; 
-boolean locked = false;
+
 //Create a PImage that will color the pixels around the mouse
 PImage mouseBox;
+
+//Zero out mouse class to start
 int mouseLoc = 0;
-//Call the Box class
-Box box;
+
+//Call the Box Array
+ArrayList<Box> boxes;
+
 void setup() {
     //Set size, 1280
     size(1280, 720);
@@ -12,9 +17,16 @@ void setup() {
     //set BG color
     background(0);
     
-    //initialize the box
-    box = new Box(500, 500, 40, 40, 255);
-    box.getCoord();
+    //intialize the box array
+    boxes = new ArrayList<Box>(20);
+    
+    int boxNumber = 20;
+    //initialize the boxes
+    for (int i = 0; i < boxNumber; i++) {
+        Box tmpBox = new Box(int(random(width)), int(random(height)), 21, 21, 0);
+        tmpBox.getCoord();
+        boxes.add(tmpBox);
+    }
     
     //initialize the PImage
     mouseBox = new PImage(width, height);
@@ -47,9 +59,13 @@ void draw() {
     }
     mouseBox.updatePixels();
     
-    box.lookUnder(mouseBox);
-    box.collisionPoint();
-    box.collisionVector();
-    box.edgeBounce();
-    box.display();
+    //Apply methods to each box in the array
+    for (int i = 0; i < boxes.size(); i++) {
+        boxes.get(i).lookUnder(mouseBox);
+        boxes.get(i).collisionPoint();
+        boxes.get(i).collisionVector();
+        boxes.get(i).edgeBounce();
+        boxes.get(i).display();
+    }
+    
 }
