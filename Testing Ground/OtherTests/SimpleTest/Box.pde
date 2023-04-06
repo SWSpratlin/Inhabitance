@@ -12,8 +12,8 @@ class Box{
     int threshold = 220; 
     
     //Center Coordinates of the Box
-    int bCx; 
-    int bCy;
+    int bCx = bW / 2; 
+    int bCy = bH / 2;
     
     PImage box; //Box for collision detection area
     IntList px; //Array for collision detection
@@ -94,13 +94,6 @@ class Box{
         //customized visually
         textSize(50);
         text(letter, bx,(by + bH));
-    }
-    
-    //Get the center point for the box. Will be used
-    //to calculate a vector later on
-    void getCenter() {
-        int bCx = (this.bW / 2);
-        int bCy = (this.bH / 2);
     }
     
     /* Look Under function. Used for examining the pixels under

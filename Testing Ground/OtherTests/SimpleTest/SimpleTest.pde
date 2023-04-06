@@ -37,12 +37,21 @@ void setup() {
     mouseBox.updatePixels();
 }
 
+//Reset function for mouse click
+void mouseReleased() {
+    for (int i = 0; i < boxes.size(); i++) {
+        boxes.get(i).bx = int(random(width));
+        boxes.get(i).by = int(random(height));
+        boxes.get(i).letter = char(int(random(65, 65 + 24)));
+    }
+}
+
 void draw() {
     image(mouseBox, 0,0);
     
-    //THIS IS NOT PART OF MY QUESTION, PRODUCES A WHITE
-    //CIRCLE THAT FOLLOWS THE MOUSE. FOR TESTING PURPOSES
-    //ONLY. PLEASE DON'T TROUBLESHOOT THIS
+    //Draw white circle around the mouse
+    //copy/paste/adjsut from "flashlight" Daniel Schiffman example
+    //Not important, will be replaced with Kinect Image
     mouseBox.loadPixels();
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
