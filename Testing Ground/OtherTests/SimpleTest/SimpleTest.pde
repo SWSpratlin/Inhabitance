@@ -77,4 +77,7 @@ void draw() {
         boxes.get(i).edgeBounce();
         boxes.get(i).display();
     }
+    // Print the framerate to the window for Performance check purposes. 
+    textSize(50);
+    text(frameRate, 100, 100);
 }

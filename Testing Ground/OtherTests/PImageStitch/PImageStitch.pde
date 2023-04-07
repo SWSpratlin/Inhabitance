@@ -2,6 +2,9 @@ PImage jay;
 PImage tony;
 PImage master;
 
+ArrayList<PImage> currentArray = new ArrayList<PImage>(2);
+
+
 void setup() {
     size(1000,500);
     
@@ -9,38 +12,41 @@ void setup() {
     tony = loadImage("tony.jpg");
     master = createImage(1000,500,RGB);
     
+    currentArray.add(jay);
+    currentArray.add(tony);
+    
 }
 
 void draw() {
     master.loadPixels();
-    jay.loadPixels();
-    tony.loadPixels();
     
-    for (int i = 0; i < jay.pixels.length; i++) {
-        jay.pixels[i] += 1;
-    }
+    //global variables make this
+    int k = 0;
+    int image = 0;
     
-    for (int i = 0; i < tony.pixels.length; i++) {
-        tony.pixels[i] -= 1;
-    }
-    
-    int i = 0;
-    int a = 0;
-    int b = 0;
-    
-    for (int y = 0; y < jay.height; y++) {
-        for (int x = 0; x < jay.width; x++) {
-            master.pixels[i] = jay.pixels[a];
-            a++;
-            i++;
+    //Combination loop
+    for (int i = 0; i < master.pixels.length; i++) {
+        if (i ==  0) {
+            image = 0;
+        } else if (i % currentArray.get(image).width == 0) {
+            if (image == 0) {
+                image = 1;
+                k -= currentArray.get(image).width;
+            } else {
+                image = 0;
+            }
         }
-        for (int u = 0; u < tony.width; u++) {
-            master.pixels[i] = tony.pixels[b];
-            b++;
-            i++;
-        }
+        // Animation goes here
+        currentArray.get(image).pixels[k] += 1;
+        
+        // Assign pixels to master
+        master.pixels[i] = currentArray.get(image).pixels[k];
+        k++;
     }
     master.updatePixels();
+    //only displaying the master image
     image(master,0,0);
     
+    textSize(50);
+    text(frameRate, 20, 20);
 }
