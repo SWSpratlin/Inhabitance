@@ -12,7 +12,7 @@ ArrayList<Box> boxes;
 
 void setup() {
     //Set size, 1280
-    size(1280,720);
+    size(1920, 1080);
     
     //set BG color
     background(0);
@@ -80,4 +80,7 @@ void draw() {
     // Print the framerate to the window for Performance check purposes. 
     textSize(50);
     text(frameRate, 100, 100);
+    stroke(255);
+    strokeWeight(10);
+    line(110, 110, frameRate * 4, 110);
 }
