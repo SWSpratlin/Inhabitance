@@ -12,7 +12,7 @@ ArrayList<Box> boxes;
 
 void setup() {
     //Set size, 1280
-    size(1920, 1080);
+    size(1280, 480);
     
     //set BG color
     background(0);
