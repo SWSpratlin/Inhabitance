@@ -25,7 +25,7 @@ void setup() {
     
     //initialize the boxes
     for (int i = 0; i < boxNumber; i++) {
-        Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 25, 0);
+        Box tmpBox = new Box(int(random(width)), int(random(height)), 40, 40, 130);
         tmpBox.getCoord();
         boxes.add(tmpBox);
     }

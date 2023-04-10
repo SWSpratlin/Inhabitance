@@ -61,7 +61,7 @@ class Box{
         box.loadPixels();
         for (int i = 0; i < box.pixels.length; i++) {
             //Make collision box transparent
-            box.pixels[i] = color(bColor, 0,0,0);
+            box.pixels[i] = color(bColor, 0,0,255);
         }
         //Update Box pixels
         box.updatePixels(); 
@@ -176,7 +176,7 @@ class Box{
         
         //Method variables.
         //Friction coeffecient. Change from between 0.01 and 0.5 for best results
-        float f = 0.2;
+        float f = 0.15;
         
         //Acceleration coeffecient for how much speed picks up after collision
         //Change between 8 and 20 for best results
@@ -184,7 +184,7 @@ class Box{
         
         //speed limiter so things don't fly away
         //Change between 3 and 10 for best results
-        float topSpeed = 4;
+        float topSpeed = 4.5;
         
         //Method objects
         PVector force;
@@ -257,17 +257,17 @@ class Box{
             //set location to the lower bound, invert and multiply velocity to 
             //avoid getting stuck on the eges
             this.bx = 0;
-            velocity.x *= -2;
+            velocity.x *= -4;
         } else if (this.bx + bW >= width) {
             this.bx = width - bW;
-            velocity.x *= -2;
+            velocity.x *= -4;
         }
         if (this.by < 0) {
             this.by = 0;
-            velocity.y *= -2;
+            velocity.y *= -4;
         } else if (this.by + bH >= height) {
             this.by = height - bH;
-            velocity.y *= -2;
+            velocity.y *= -4;
         }
     }
 }   
