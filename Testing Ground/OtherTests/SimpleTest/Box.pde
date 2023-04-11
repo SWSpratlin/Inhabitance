@@ -20,6 +20,7 @@ class Box{
     ArrayList<Point> coord; //Coordinate array for Vector generation
     Point cPoint; //Point that feeds from collisionPoint into collisionVector.
     char letter; //Random letter variable, global so it can change
+    int letterNumber; //Number associated with each letter. Used for Sound NoteTrack class
     
     //objects for any movement related methods
     PVector location;
@@ -27,8 +28,13 @@ class Box{
     PVector acceleration;
     PVector friction = new PVector(0,0);
     
+    // Boolean for sound methods. 
+    boolean hasMoved = false;
+    
     float f; //friction coeffecient, used in collisionVector
     float mass = 1.5; //mass, just to find out if it helps. (it doesn't really)
+    
+    NoteTrack note;
     
     //Constructor. Called in SETUP
     //Intakes spawn coordinates, size, color
@@ -55,7 +61,13 @@ class Box{
         fill(170);
         
         //Generate random character
-        letter = char(int(random(65, 65 + 24)));
+        letterNumber = int(random(65, 65 + 26));
+        letter = char(letterNumber);
+        
+        note = new NoteTrack(letterNumber);
+        note.setAmp(0);
+        note.play(letterNumber);
+        
         
         //Color Box pixels (mostly for debugging)
         box.loadPixels();
@@ -92,15 +104,25 @@ class Box{
         // Call box image. Necessary for loadPixels() later to work
         image(box, bx, by);
         
+        // Note amplitude control AFTER the letter moves
+        if (hasMoved) {
+            note.variableAmplitude(this.by, letterNumber);
+        }
+        
         //Call the text and character. This is where the text can be 
         //customized visually
-        textSize(50);
+        textSize(30);
         text(letter, bx,(by + bH));
+        
+        //debugging text goes here
+        String debug = "note: " + note.getFile(letterNumber);
+        textSize(20);
+        text(debug, bx, by - 1);
     }
     
     /* Look Under function. Used for examining the pixels under the box. 
     
-    Must be called in DRAW for any methods that reference the px[] array to work*/
+    Mustbe called in DRAW for any methods that reference the px[] array to work*/
     void lookUnder(PImage p) {
         
         //Generate PImage (and therefore a pixels array) for the space under the box
@@ -176,11 +198,11 @@ class Box{
         
         //Method variables.
         //Friction coeffecient. Change from between 0.01 and 0.5 for best results
-        float f = 0.15;
+        float f = 0.25;
         
         //Acceleration coeffecient for how much speed picks up after collision
         //Change between 8 and 20 for best results
-        float aMult = 15;
+        float aMult = 8;
         
         //speed limiter so things don't fly away
         //Change between 3 and 10 for best results
@@ -238,14 +260,19 @@ class Box{
         
         //Drift elimination. If the velocity is within a certain threshold
         //zero it out. Threshold should be low enough that this seems natural
-        float lowThresh = -0.03;
-        float highThresh = 0.03;
+        float lowThresh = -0.04;
+        float highThresh = 0.04;
         
         //lotta && statements to find out if 2 values are within a range
         if (lowThresh <= velocity.x && velocity.x <= highThresh && lowThresh <= velocity.y && velocity.y <= highThresh) {
             velocity.set(0,0);
         }
         
+        // jump back to the start of the note if the letter moves
+        if (velocity.x != 0 || velocity.y != 0) {
+            note.jump(letterNumber, 0);
+            hasMoved = true;
+        }
     }
     
     //bounce off the edges

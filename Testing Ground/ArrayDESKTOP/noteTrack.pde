@@ -8,9 +8,16 @@ class noteTrack{
     
     float variableAmp;
     
-    SoundFile note;
+    ArrayList<SoundFile> notes;
+    
     noteTrack() {
         
+        notes = new ArrayList<SoundFile>();
+        
+        for (int i = 0; i < 26; i++) {
+            notes.append(ArrayDesktop.this,))
+            }
+            
+        }
+        
     }
-    
-}

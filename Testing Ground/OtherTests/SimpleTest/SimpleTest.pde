@@ -1,5 +1,17 @@
 //Import Point class, important
 import java.awt.Point; 
+//Import Sound library. Important for NoteTrack to work
+//import processing.sound.*;
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.effects.*;
+import ddf.minim.signals.*;
+import ddf.minim.spi.*;
+import ddf.minim.ugens.*;
+
+
+// name the PApplet master so we can refernce in other classes
+public PApplet master = this;
 
 //Create a PImage that will color the pixels around the mouse
 PImage mouseLight;
@@ -25,7 +37,7 @@ void setup() {
     
     //initialize the boxes
     for (int i = 0; i < boxNumber; i++) {
-        Box tmpBox = new Box(int(random(width)), int(random(height)), 40, 40, 130);
+        Box tmpBox = new Box(int(random(width)), int(random(height)), 20, 20, 130);
         tmpBox.getCoord();
         boxes.add(tmpBox);
     }
@@ -44,7 +56,7 @@ void mouseReleased() {
     for (int i = 0; i < boxes.size(); i++) {
         boxes.get(i).bx = int(random(width));
         boxes.get(i).by = int(random(height));
-        boxes.get(i).letter = char(int(random(65, 65 + 24)));
+        boxes.get(i).letterNumber = int(random(65, 65 + 24));
     }
 }
 
