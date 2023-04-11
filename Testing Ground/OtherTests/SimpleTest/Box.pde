@@ -104,7 +104,7 @@ class Box{
         // Call box image. Necessary for loadPixels() later to work
         image(box, bx, by);
         
-        // Note amplitude control AFTER the letter moves
+        //Note amplitude control AFTER the letter moves
         if (hasMoved) {
             note.variableAmplitude(this.by, letterNumber);
         }

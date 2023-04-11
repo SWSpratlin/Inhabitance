@@ -1,14 +1,7 @@
 //Import Point class, important
 import java.awt.Point; 
 //Import Sound library. Important for NoteTrack to work
-//import processing.sound.*;
-import ddf.minim.*;
-import ddf.minim.analysis.*;
-import ddf.minim.effects.*;
-import ddf.minim.signals.*;
-import ddf.minim.spi.*;
-import ddf.minim.ugens.*;
-
+import processing.sound.*;
 
 // name the PApplet master so we can refernce in other classes
 public PApplet master = this;
