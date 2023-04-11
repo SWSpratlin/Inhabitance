@@ -15,6 +15,9 @@ int mouseLoc = 0;
 //Call the Box Array
 ArrayList<Box> boxes;
 
+//Call the notes
+NoteTrack note;
+
 void setup() {
     //Set size, 1280
     size(1280, 480);
@@ -33,6 +36,7 @@ void setup() {
         Box tmpBox = new Box(int(random(width)), int(random(height)), 20, 20, 130);
         tmpBox.getCoord();
         boxes.add(tmpBox);
+        note = new NoteTrack(boxes.get(i).letterNumber);
     }
     
     //initialize the mouseLight PImage
@@ -81,6 +85,10 @@ void draw() {
         boxes.get(i).collisionVector();
         boxes.get(i).edgeBounce();
         boxes.get(i).display();
+        if (boxes.get(i).isMoving == true && note.isPlaying(boxes.get(i).letterNumber) == false) {
+            note.play(boxes.get(i).letterNumber);
+        }
+        note.variableAmplitude(boxes.get(i).by, boxes.get(i).letterNumber);
     }
     // Print the framerate to the window for Performance check purposes. 
     textSize(50);

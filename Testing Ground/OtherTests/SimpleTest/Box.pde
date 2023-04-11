@@ -30,11 +30,10 @@ class Box{
     
     // Boolean for sound methods. 
     boolean hasMoved = false;
+    boolean isMoving = false;
     
     float f; //friction coeffecient, used in collisionVector
     float mass = 1.5; //mass, just to find out if it helps. (it doesn't really)
-    
-    NoteTrack note;
     
     //Constructor. Called in SETUP
     //Intakes spawn coordinates, size, color
@@ -63,11 +62,6 @@ class Box{
         //Generate random character
         letterNumber = int(random(65, 65 + 26));
         letter = char(letterNumber);
-        
-        note = new NoteTrack(letterNumber);
-        note.setAmp(0);
-        note.play(letterNumber);
-        
         
         //Color Box pixels (mostly for debugging)
         box.loadPixels();
@@ -104,18 +98,13 @@ class Box{
         // Call box image. Necessary for loadPixels() later to work
         image(box, bx, by);
         
-        //Note amplitude control AFTER the letter moves
-        if (hasMoved) {
-            note.variableAmplitude(this.by, letterNumber);
-        }
-        
         //Call the text and character. This is where the text can be 
         //customized visually
         textSize(30);
         text(letter, bx,(by + bH));
         
         //debugging text goes here
-        String debug = "note: " + note.getFile(letterNumber);
+        String debug = "--";
         textSize(20);
         text(debug, bx, by - 1);
     }
@@ -227,11 +216,13 @@ class Box{
             //Normalize the vector, and multiply it to create acceleration upon collision
             dir.normalize();
             dir.mult(aMult);
+            isMoving = true;
             
         } else {
             //If there is no collision, make sure the directional vector is zeroed out. 
             //Causes drift without this.
             dir.set(0,0);
+            isMoving = false;
         }
         
         //SET UPFRICTION
@@ -266,12 +257,7 @@ class Box{
         //lotta && statements to find out if 2 values are within a range
         if (lowThresh <= velocity.x && velocity.x <= highThresh && lowThresh <= velocity.y && velocity.y <= highThresh) {
             velocity.set(0,0);
-        }
-        
-        // jump back to the start of the note if the letter moves
-        if (velocity.x != 0 || velocity.y != 0) {
-            note.jump(letterNumber, 0);
-            hasMoved = true;
+            isMoving = false;
         }
     }
     
