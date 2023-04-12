@@ -14,9 +14,7 @@ int mouseLoc = 0;
 
 //Call the Box Array
 ArrayList<Box> boxes;
-
-//Call the notes
-NoteTrack note;
+ArrayList<String> notes;
 
 void setup() {
     //Set size, 1280
@@ -24,6 +22,34 @@ void setup() {
     
     //set BG color
     background(0);
+    
+    notes = new ArrayList<String>();
+    notes.add("A__1.wav");
+    notes.add("B__1.wav");
+    notes.add("C__1.wav");
+    notes.add("D__1.wav");
+    notes.add("E__1.wav");
+    notes.add("F__1.wav");
+    notes.add("G__1.wav");
+    notes.add("H__1.wav");
+    notes.add("I__1.wav");
+    notes.add("J__1.wav");
+    notes.add("K__1.wav");
+    notes.add("L__1.wav");
+    notes.add("M__1.wav");
+    notes.add("N__1.wav");
+    notes.add("O__1.wav");
+    notes.add("P__1.wav");
+    notes.add("Q__1.wav");
+    notes.add("R__1.wav");
+    notes.add("S__1.wav");
+    notes.add("T__1.wav");
+    notes.add("U__1.wav");
+    notes.add("V__1.wav");
+    notes.add("W__1.wav");
+    notes.add("X__1.wav");
+    notes.add("Y__1.wav");
+    notes.add("Z__1.wav");
     
     //Set number of boxes to spawn
     int boxNumber = 40;
@@ -36,7 +62,6 @@ void setup() {
         Box tmpBox = new Box(int(random(width)), int(random(height)), 20, 20, 130);
         tmpBox.getCoord();
         boxes.add(tmpBox);
-        note = new NoteTrack(boxes.get(i).letterNumber);
     }
     
     //initialize the mouseLight PImage
@@ -46,6 +71,8 @@ void setup() {
         mouseLight.pixels[i] = color(0);
     }
     mouseLight.updatePixels();
+    
+    
 }
 
 //Reset function for mouse click. Also randomizes letters
@@ -85,10 +112,6 @@ void draw() {
         boxes.get(i).collisionVector();
         boxes.get(i).edgeBounce();
         boxes.get(i).display();
-        if (boxes.get(i).isMoving == true && note.isPlaying(boxes.get(i).letterNumber) == false) {
-            note.play(boxes.get(i).letterNumber);
-        }
-        note.variableAmplitude(boxes.get(i).by, boxes.get(i).letterNumber);
     }
     // Print the framerate to the window for Performance check purposes. 
     textSize(50);

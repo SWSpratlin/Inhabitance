@@ -20,7 +20,12 @@ class Box{
     ArrayList<Point> coord; //Coordinate array for Vector generation
     Point cPoint; //Point that feeds from collisionPoint into collisionVector.
     char letter; //Random letter variable, global so it can change
-    int letterNumber; //Number associated with each letter. Used for Sound NoteTrack class
+    int letterNumber; //Number associated with each letter. 
+    int noteNumber; // ASCII number to access the <notes> array
+    
+    SoundFile boxNote;
+    
+    float varAmp = 0;
     
     //objects for any movement related methods
     PVector location;
@@ -60,8 +65,12 @@ class Box{
         fill(170);
         
         //Generate random character
-        letterNumber = int(random(65, 65 + 26));
-        letter = char(letterNumber);
+        letterNumber = int(random(65, 65 + 26)); //generate ASCII values for char(). CAPS. 
+        noteNumber = letterNumber - 65; //convert ASCII values to ints that can access <notes>
+        letter = char(letterNumber); // Assign char() a random CAPS letter
+        
+        boxNote = new SoundFile(master, notes.get(noteNumber));
+        
         
         //Color Box pixels (mostly for debugging)
         box.loadPixels();
@@ -254,9 +263,25 @@ class Box{
         float lowThresh = -0.04;
         float highThresh = 0.04;
         
+        // Variable Amp
+        float varAmp = map(this.by, 0, height, 0,1);
+        boxNote.amp(varAmp);
+        
         //lotta && statements to find out if 2 values are within a range
         if (lowThresh <= velocity.x && velocity.x <= highThresh && lowThresh <= velocity.y && velocity.y <= highThresh) {
             velocity.set(0,0);
+            isMoving = false;
+        }
+        
+        if (isMoving == true && boxNote.isPlaying() == false) {
+            boxNote.play();
+            isMoving = false;
+        }
+        
+        float noteThresh = 0.25;
+        
+        if (isMoving == true && boxNote.position() > noteThresh) {
+            boxNote.jump(0);
             isMoving = false;
         }
     }
