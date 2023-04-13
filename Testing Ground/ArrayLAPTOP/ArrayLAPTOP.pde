@@ -1,14 +1,10 @@
-//This is the KINECT version, DOES NOT WORK. For testing see
-//the iteration in Video Collision 3 folder
-
+//This is the KINECT version 
 import processing.video.*;
 import java.awt.Point; 
 
 //Expeimenting with Kinect Interaction
 import org.openkinect.freenect.*;
 import org.openkinect.processing.*;
-
-Point zeroPoint;
 
 // Depth image
 PImage depthImg;
@@ -18,14 +14,38 @@ float maxDepth = 800;
 Kinect kinect;
 
 ArrayList<Box> boxes;
-
-//Box object spawns a letter
-Box box;
-
-boolean locked = false; //Mouse Locked indicator, will be deleted after testing
+ArrayList<String> notes;
 
 void setup() {
     size(640,480);
+    
+    notes = new ArrayList<String>();
+    notes.add("A__1.wav");
+    notes.add("B__1.wav");
+    notes.add("C__1.wav");
+    notes.add("D__1.wav");
+    notes.add("E__1.wav");
+    notes.add("F__1.wav");
+    notes.add("G__1.wav");
+    notes.add("H__1.wav");
+    notes.add("I__1.wav");
+    notes.add("J__1.wav");
+    notes.add("K__1.wav");
+    notes.add("L__1.wav");
+    notes.add("M__1.wav");
+    notes.add("N__1.wav");
+    notes.add("O__1.wav");
+    notes.add("P__1.wav");
+    notes.add("Q__1.wav");
+    notes.add("R__1.wav");
+    notes.add("S__1.wav");
+    notes.add("T__1.wav");
+    notes.add("U__1.wav");
+    notes.add("V__1.wav");
+    notes.add("W__1.wav");
+    notes.add("X__1.wav");
+    notes.add("Y__1.wav");
+    notes.add("Z__1.wav");
     
     //KInect initialization
     kinect = new Kinect(this);
@@ -42,9 +62,6 @@ void setup() {
     
     //Blank image
     depthImg = new PImage(width, height);
-    
-    //ZeroPoint for reference
-    zeroPoint = new Point(0,0);
 }
 
 void mouseReleased() {
@@ -56,16 +73,16 @@ void mouseReleased() {
 
 void keyPressed() {
     if (keyCode == RIGHT) {
-        maxDepth += 50;
+        maxDepth += 10;
     }
     if (keyCode == LEFT) {
-        maxDepth -= 50;
+        maxDepth -= 10;
     }
     if (keyCode == UP) {
-        minDepth += 50;
+        minDepth += 10;
     }
     if (keyCode == DOWN) {
-        minDepth -= 50;
+        minDepth -= 10;
     }
 }
 
@@ -96,5 +113,12 @@ void draw() {
         boxes.get(i).collisionPoint();
         boxes.get(i).collisionVector();
     }
+    
+    //debugging purposes
+    textSize(50);
+    text(frameRate, 100, 100);
+    stroke(255);
+    strokeWeight(10);
+    line(110, 110, frameRate * 4, 110);
     
 }

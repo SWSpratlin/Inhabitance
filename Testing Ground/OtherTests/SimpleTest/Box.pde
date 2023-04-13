@@ -40,6 +40,8 @@ class Box{
     float f; //friction coeffecient, used in collisionVector
     float mass = 1.5; //mass, just to find out if it helps. (it doesn't really)
     
+    PFont font;
+    
     //Constructor. Called in SETUP
     //Intakes spawn coordinates, size, color
     Box(int x_, int y_, int sizeW, int sizeH, int bColor) {
@@ -62,7 +64,10 @@ class Box{
         box = createImage(bW,bH, HSB);
         
         //Color Letter
-        fill(170);
+        fill(200);
+        
+        font = createFont("01_AvenirHeavy.ttf", 30);
+        
         
         //Generate random character
         letterNumber = int(random(65, 65 + 26)); //generate ASCII values for char(). CAPS. 
@@ -76,7 +81,7 @@ class Box{
         box.loadPixels();
         for (int i = 0; i < box.pixels.length; i++) {
             //Make collision box transparent
-            box.pixels[i] = color(bColor, 0,0,255);
+            box.pixels[i] = color(bColor, 0,0,0);
         }
         //Update Box pixels
         box.updatePixels(); 
@@ -109,13 +114,14 @@ class Box{
         
         //Call the text and character. This is where the text can be 
         //customized visually
-        textSize(30);
+        
+        textFont(font, 30);
         text(letter, bx,(by + bH));
         
         //debugging text goes here
-        String debug = "--";
-        textSize(20);
-        text(debug, bx, by - 1);
+        // String debug = "--";
+        // textSize(20);
+        // text(debug, bx, by - 1);
     }
     
     /* Look Under function. Used for examining the pixels under the box. 

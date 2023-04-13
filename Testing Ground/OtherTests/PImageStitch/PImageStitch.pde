@@ -12,8 +12,7 @@ ArrayList<Box> boxes;
 int mouseLoc = 0;
 
 void setup() {
-    size(1280,480);
-    
+    size(1280 * 2,480 * 2);
     //Set number of boxes to spawn
     int boxNumber = 40;
     
@@ -29,7 +28,7 @@ void setup() {
         tony.pixels[i] = color(30);
     }
     tony.updatePixels();
-    master = createImage(width,height,HSB);
+    master = createImage(jay.width * 4, jay.height * 2,HSB);
     
     currentArray.add(jay); // set Jay at index 0
     currentArray.add(tony); // set Tony at index 1
@@ -86,11 +85,16 @@ void draw() {
                 Only has to go back when going to the second image (one on the right) otherwise
                 it can just keep going. 
                 */
-                k -= currentArray.get(image).width;
+                if (k > currentArray.get(image).width) {
+                    k -= currentArray.get(image).width;
+                }
+                
             } else {
                 
                 // don't have to reset K when coming back to the first image
                 image = 0;
+                i += master.width;
+                
             }
         }
         
@@ -98,11 +102,21 @@ void draw() {
         mouseLoc = mouseX + mouseY * width;
         
         // Animation goes here
-        master.pixels[mouseLoc] = color(255);
+        jay.pixels[k] = color(map(mouseX, 0, width, 0, 255), 150, 255);
+        tony.pixels[k] = color(map(mouseY, 0, height, 0, 255), 50, 100);
         
         // Assign pixels from each inmage to master
-        master.pixels[i] = currentArray.get(image).pixels[k];
+        if (i + master.width + 1 < master.pixels.length) {
+            master.pixels[i] = currentArray.get(image).pixels[k];
+            master.pixels[i + master.width] = currentArray.get(image).pixels[k];
+            i ++;
+            master.pixels[i] = currentArray.get(image).pixels[k];
+            master.pixels[i + master.width] = currentArray.get(image).pixels[k];
+            
+        }
+        
         k++;
+        
     }
     master.updatePixels();
     //only displaying the master image
