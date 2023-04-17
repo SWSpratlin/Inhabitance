@@ -1,10 +1,12 @@
 //This is the KINECT version 
-import processing.video.*;
+import processing.sound.*;
 import java.awt.Point; 
 
 //Expeimenting with Kinect Interaction
 import org.openkinect.freenect.*;
 import org.openkinect.processing.*;
+
+public PApplet master = this;
 
 // Depth image
 PImage depthImg;
@@ -54,7 +56,7 @@ void setup() {
     
     boxes = new ArrayList<Box>(10);
     
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 30; i++) {
         Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 15, 150);
         tmpBox.getCoord();
         boxes.add(tmpBox);
@@ -115,10 +117,11 @@ void draw() {
     }
     
     //debugging purposes
-    textSize(50);
-    text(frameRate, 100, 100);
+    fill(255);
+    textSize(20);
+    text(frameRate, 10, 10);
     stroke(255);
     strokeWeight(10);
-    line(110, 110, frameRate * 4, 110);
+    line(11, 11, frameRate * 4, 11);
     
 }
