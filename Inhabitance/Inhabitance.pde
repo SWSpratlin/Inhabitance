@@ -7,7 +7,8 @@ import org.openkinect.processing.*;
 public PApplet master = this;
 
 // Depth image
-PImage depthImg;
+PImage depthImg1;
+PImage depthImg2;
 PImage masterImg;
 
 ArrayList<int[]> currentArray = new ArrayList<int[]>();
@@ -74,6 +75,7 @@ void setup() {
         Kinect tempKinect = new Kinect(this);
         tempKinect.activateDevice(i);
         tempKinect.initDepth();
+        
         kinects.add(tempKinect);
     }
     
@@ -131,9 +133,13 @@ void draw() {
     int k = 0;
     int image = 0;
     
+    for (int i = 0; i < kinects.size(); i++) {
+        Kinect tmpKinect = (Kinect)kinects.get(i);
+        image(tmpKinect.getDepthImage() 0,0);
+    }
+    
     //RawDepth Array. Changes every time the kinect it switched.
-    rawDepth1 = kinects.get(0).getRawDepth();
-    rawDepth2 = kinects.get(1).getRawDepth();
+    
     
     //Combo Loop
     for (int i = 0; i < masterImg.pixels.length; i++) {
