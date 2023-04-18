@@ -75,8 +75,9 @@ void setup() {
         Kinect tempKinect = new Kinect(this);
         tempKinect.activateDevice(i);
         tempKinect.initDepth();
-        
         kinects.add(tempKinect);
+        int[] tempRawDepth = tempKinect.getRawDepth();
+        currentArray.add(tempRawDepth);
     }
     
     //Initialize Array
@@ -88,12 +89,6 @@ void setup() {
         tmpBox.getCoord();
         boxes.add(tmpBox);
     }
-    
-    //RawDepth Array. Changes every time the kinect it switched.
-    rawDepth1 = kinects.get(0).getRawDepth();
-    rawDepth2 = kinects.get(1).getRawDepth();
-    currentArray.add(rawDepth1);
-    currentArray.add(rawDepth2);
     
     //Blank image
     //depthImg = new PImage(width, height);
@@ -135,7 +130,7 @@ void draw() {
     
     for (int i = 0; i < kinects.size(); i++) {
         Kinect tmpKinect = (Kinect)kinects.get(i);
-        image(tmpKinect.getDepthImage() 0,0);
+        image(tmpKinect.getDepthImage(), 0,0);
     }
     
     //RawDepth Array. Changes every time the kinect it switched.
