@@ -144,12 +144,6 @@ void draw() {
     int k = 0;
     int image = 0;
     
-    //Experiment with taking this out
-    for (int i = 0; i < kinects.size(); i++) {
-        Kinect tmpKinect = (Kinect)kinects.get(i);
-        image(tmpKinect.getDepthImage(), 0,0);
-    }
-    
     //Combo Loop
     for (int i = 0; i < masterImg.pixels.length; i++) {
         
