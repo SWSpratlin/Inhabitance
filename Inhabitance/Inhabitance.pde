@@ -1,4 +1,3 @@
-//This is the KINECT version 
 import processing.sound.*;
 import java.awt.Point; 
 import org.openkinect.freenect.*;
@@ -6,14 +5,11 @@ import org.openkinect.processing.*;
 
 public PApplet master = this;
 
-// Depth image
-PImage depthImg1;
-PImage depthImg2;
+//Master Image
 PImage masterImg;
 
+//Array to store the Int arrays for the Switching block
 ArrayList<int[]> currentArray = new ArrayList<int[]>();
-int[] rawDepth1;
-int[] rawDepth2;
 
 //Depth Thresholds
 float minDepth =  300;
@@ -30,13 +26,14 @@ ArrayList<String> notes;
 int boxNumber = 40;
 
 //Device variables
-int deviceIndex = 0;
 int numDevices = 0;
 
 void setup() {
+    // Size. Width has to be double the width of a Kinect
+    //This lets 2 Kinect feeds populate next to each other
     size(1280,480);
     
-    //Populate Note Array
+    //Populate Notes Array
     notes = new ArrayList<String>();
     notes.add("A__1.wav");
     notes.add("B__1.wav");
@@ -69,33 +66,53 @@ void setup() {
     numDevices = Kinect.countDevices();
     println(numDevices);
     
+    //Initialize Kinect array
     kinects = new ArrayList<Kinect>();
+    
     //Iterate through as many Kinects as are connected
     for (int i = 0; i < numDevices; i++) {
+        //Initialize object for each Kinect detected
         Kinect tempKinect = new Kinect(this);
+        
+        //Activate the Current Kinect
         tempKinect.activateDevice(i);
+        
+        //Initialize Depth for current Kinect
         tempKinect.initDepth();
+        
+        //Add the current Kinect to the Array
         kinects.add(tempKinect);
+        
+        //Initialize rawDepth array for each Kinect
+        //MUST BE IN THIS LOOP OR ONLY ONE KINECT WILL WORK
         int[] tempRawDepth = tempKinect.getRawDepth();
+        
+        //Add the rawDepth array to the Switching Array
         currentArray.add(tempRawDepth);
     }
     
-    //Initialize Array
+    //Initialize Box Array
     boxes = new ArrayList<Box>(boxNumber);
     
-    //Create Boxes
+    //Create Letters
     for (int i = 0; i < boxNumber; i++) {
+        
+        //Temp Boxes, spawn at random places on screen
         Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 15, 150);
+        
+        // Populate the Coordinate Array for each letter
         tmpBox.getCoord();
+        
+        //Add each new Letter to the box Array
         boxes.add(tmpBox);
     }
     
     //Blank image
-    //depthImg = new PImage(width, height);
     masterImg = createImage(width, height, RGB);
 }
 
-//Reset Function, will work out a different method later
+//Reset Function, will work out a different physical interface
+//at a later time. Possibly Arduino Button. 
 void mouseReleased() {
     for (int i = 0; i < boxes.size(); i++) {
         boxes.get(i).bx = int(random(width));
@@ -119,22 +136,19 @@ void keyPressed() {
     }
 }
 
-
 void draw() {
-    //Load both Pixel Arrays
+    //Load masterImg pixel Array
     masterImg.loadPixels();
     
-    //Interating Variables
+    //Interating/Switching Variables
     int k = 0;
     int image = 0;
     
+    //Experiment with taking this out
     for (int i = 0; i < kinects.size(); i++) {
         Kinect tmpKinect = (Kinect)kinects.get(i);
         image(tmpKinect.getDepthImage(), 0,0);
     }
-    
-    //RawDepth Array. Changes every time the kinect it switched.
-    
     
     //Combo Loop
     for (int i = 0; i < masterImg.pixels.length; i++) {
@@ -156,8 +170,7 @@ void draw() {
                 set of numbers twice each time. Use [k] to coontrol each image individually
                 
                 Only has to go back when going to the second image (one on the right) otherwise
-                it can just keep going. 
-                */
+                it can just keep going. */
                 if (k > kinects.get(image).width) {
                     k -= kinects.get(image).width;
                 }
@@ -166,10 +179,11 @@ void draw() {
                 
                 // don't have to reset K when coming back to the first image
                 image = 0;
-                
             }
         }
         
+        //reset K if it reaches the end prematurely. 
+        //This helps to solve OutOfBounds errors
         if (k >= currentArray.get(image).length) {
             k = 0;
         }
@@ -181,11 +195,14 @@ void draw() {
             masterImg.pixels[i] = color(0);
         }
         
+        //Increment k
         k++;
     }
     
-    //Draw the thresholded image
+    //Update Master Image
     masterImg.updatePixels();
+    
+    //Display Master Image
     image(masterImg, 0,0);
     
     //Physics for Boxes
@@ -197,7 +214,7 @@ void draw() {
         boxes.get(i).collisionVector();
     }
     
-    // //debugging purposes
+    // //debugging purposes and performance checks
     // fill(255);
     // textSize(20);
     // text(frameRate, 10, 10);
