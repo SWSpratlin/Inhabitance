@@ -42,8 +42,6 @@ void setup() {
         tmpBox.getCoord();
         boxes.add(tmpBox);
     }
-    
-    
 }
 
 // Mouse click randomizer
@@ -71,7 +69,7 @@ void draw() {
             image = 0;
             
             // Modulus to switch the array every other time. 
-        } else if (i % currentArray.get(image).width == 0) {
+        } else if (i % (currentArray.get(image).width * 2) == 0) {
             
             // check which array is selected
             if (image == 0) {
@@ -101,18 +99,24 @@ void draw() {
         //animation variable
         mouseLoc = mouseX + mouseY * width;
         
+        if (k >= currentArray.get(image).width) {
+            k = 0;
+        }
+        
         // Animation goes here
         jay.pixels[k] = color(map(mouseX, 0, width, 0, 255), 150, 255);
         tony.pixels[k] = color(map(mouseY, 0, height, 0, 255), 50, 100);
         
+        int i2 = i + 1;
+        int i3 = i + width;
+        int i4 = i2 + width;
         // Assign pixels from each inmage to master
         if (i + master.width + 1 < master.pixels.length) {
             master.pixels[i] = currentArray.get(image).pixels[k];
-            master.pixels[i + master.width] = currentArray.get(image).pixels[k];
-            i ++;
-            master.pixels[i] = currentArray.get(image).pixels[k];
-            master.pixels[i + master.width] = currentArray.get(image).pixels[k];
-            
+            master.pixels[i2] = currentArray.get(image).pixels[k];
+            master.pixels[i3] = currentArray.get(image).pixels[k];
+            master.pixels[i4] = currentArray.get(image).pixels[k];
+            i++;
         }
         
         k++;
