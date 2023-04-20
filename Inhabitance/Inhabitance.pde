@@ -23,7 +23,7 @@ ArrayList<Box> boxes;
 ArrayList<String> notes;
 
 //Number of Boxes to spawn
-int boxNumber = 40;
+int boxNumber = 60;
 
 //Device variables
 int numDevices = 0;
