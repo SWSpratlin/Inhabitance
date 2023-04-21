@@ -33,6 +33,8 @@ class Box{
     PVector acceleration;
     PVector friction = new PVector(0,0);
     
+    float aMult;
+    
     // Boolean for sound methods. 
     boolean hasMoved = false;
     boolean isMoving = false;
@@ -177,6 +179,7 @@ class Box{
                         sumX += collisionArrayX.get(o);
                         sumY += collisionArrayY.get(o);
                     }
+                    aMult = map(collisionArrayX.size(), 0,(bW * 2), 3, 15);
                     
                     //assign cPoint as the mean of the arrays rather than
                     // the first bright pixel in each pass. normalizes collision vector                
@@ -206,7 +209,7 @@ class Box{
         
         //Acceleration coeffecient for how much speed picks up after collision
         //Change between 8 and 20 for best results
-        float aMult = 8;
+        //aMult = 8;
         
         //speed limiter so things don't fly away
         //Change between 3 and 10 for best results
