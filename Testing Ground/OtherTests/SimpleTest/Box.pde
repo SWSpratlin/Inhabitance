@@ -179,7 +179,7 @@ class Box{
                         sumX += collisionArrayX.get(o);
                         sumY += collisionArrayY.get(o);
                     }
-                    aMult = map(collisionArrayX.size(), 0,(bW * 2), 3, 15);
+                    aMult = map(collisionArrayX.size(), 1,(bW * 2), 1, 15);
                     
                     //assign cPoint as the mean of the arrays rather than
                     // the first bright pixel in each pass. normalizes collision vector                
@@ -269,8 +269,8 @@ class Box{
         
         //Drift elimination. If the velocity is within a certain threshold
         //zero it out. Threshold should be low enough that this seems natural
-        float lowThresh = -0.04;
-        float highThresh = 0.04;
+        float lowThresh = -0.05;
+        float highThresh = 0.05;
         
         // Variable Amp
         float varAmp = map(this.by, 0, height, 0,1);

@@ -7,49 +7,43 @@ PImage master;
 ArrayList<PImage> currentArray = new ArrayList<PImage>(2);
 
 //Call the Box Array
-ArrayList<Box> boxes;
+//ArrayList<Box> boxes;
 
 int mouseLoc = 0;
 
 void setup() {
-    size(1280 * 2,480 * 2);
+    size(2000, 1000);
     //Set number of boxes to spawn
-    int boxNumber = 40;
+    //int boxNumber = 40;
     
-    jay = createImage(640,480,RGB);
-    jay.loadPixels();
-    for (int i = 0; i < jay.pixels.length; i++) {
-        jay.pixels[i] = color(0);
-    }
-    jay.updatePixels();
-    tony = createImage(640,480,RGB);
-    tony.loadPixels();
-    for (int i = 0; i < tony.pixels.length; i++) {
-        tony.pixels[i] = color(30);
-    }
-    tony.updatePixels();
+    jay = loadImage("jay.JPG");
+    //jay.loadPixels();
+    
+    tony = loadImage("tony.jpg");
+    //tony.loadPixels();
+    
     master = createImage(jay.width * 4, jay.height * 2,HSB);
     
     currentArray.add(jay); // set Jay at index 0
     currentArray.add(tony); // set Tony at index 1
     
     //intialize the box array
-    boxes = new ArrayList<Box>(boxNumber);
+    //boxes = new ArrayList<Box>(boxNumber);
     
     //initialize the boxes
-    for (int i = 0; i < boxNumber; i++) {
-        Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 25, 0);
-        tmpBox.getCoord();
-        boxes.add(tmpBox);
-    }
+    //for (int i = 0; i < boxNumber; i++) {
+    //Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 25, 0);
+    //tmpBox.getCoord();
+    //boxes.add(tmpBox);
+//}
 }
 
 // Mouse click randomizer
 void mouseReleased() {
-    for (int i = 0; i < boxes.size(); i++) {
-        boxes.get(i).bx = int(random(width));
-        boxes.get(i).by = int(random(height));
-    }
+    //for (int i = 0; i < boxes.size(); i++) {
+    //boxes.get(i).bx = int(random(width));
+    //boxes.get(i).by = int(random(height));
+//}
 }
 
 void draw() {
@@ -83,9 +77,7 @@ void draw() {
                 Only has to go back when going to the second image (one on the right) otherwise
                 it can just keep going. 
                 */
-                if (k > currentArray.get(image).width) {
-                    k -= currentArray.get(image).width;
-                }
+                k -= currentArray.get(image).width;
                 
             } else {
                 
@@ -97,15 +89,15 @@ void draw() {
         }
         
         //animation variable
-        mouseLoc = mouseX + mouseY * width;
+        //mouseLoc = mouseX + mouseY * width;
         
-        if (k >= currentArray.get(image).width) {
+        if (k >= currentArray.get(image).pixels.length) {
             k = 0;
         }
         
         // Animation goes here
-        jay.pixels[k] = color(map(mouseX, 0, width, 0, 255), 150, 255);
-        tony.pixels[k] = color(map(mouseY, 0, height, 0, 255), 50, 100);
+        //jay.pixels[k] += 1;
+        // tony.pixels[k] += 1;
         
         int i2 = i + 1;
         int i3 = i + width;
@@ -118,30 +110,32 @@ void draw() {
             master.pixels[i4] = currentArray.get(image).pixels[k];
             i++;
         }
-        
-        k++;
-        
+        k++;  
     }
     master.updatePixels();
     //only displaying the master image
-    image(master,0,0);
+    
+    scale( -1,1);
+    image(master, -master.width, 0);
+    
+    
     
     
     //Apply methods to each box in the array
-    for (int i = 0; i < boxes.size(); i++) {
-        int u = boxes.size() - 1;
-        boxes.get(i).lookUnder(master);
-        boxes.get(i).collisionPoint();
-        boxes.get(i).collisionVector();
-        boxes.get(i).edgeBounce();
-        boxes.get(i).display();
-    }
+    // for (int i = 0; i < boxes.size(); i++) {
+    //     int u = boxes.size() - 1;
+    //     boxes.get(i).lookUnder(master);
+    //     boxes.get(i).collisionPoint();
+    //     boxes.get(i).collisionVector();
+    //     boxes.get(i).edgeBounce();
+    //     boxes.get(i).display();
+// }
     
     textSize(50);
-    text(frameRate, 10, 50);
+    text(frameRate, -1000, 50);
     strokeWeight(10);
     stroke(0);
-    line(20, 60, 240, 60);
+    line( -20, 60, -240, 60);
     stroke(255);
-    line(20, 60, frameRate * 4, 60);
+    line( -20, 60, -frameRate * 4, 60);
 }
