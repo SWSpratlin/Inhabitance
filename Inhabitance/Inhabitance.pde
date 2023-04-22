@@ -117,6 +117,7 @@ void mouseReleased() {
     for (int i = 0; i < boxes.size(); i++) {
         boxes.get(i).bx = int(random(width));
         boxes.get(i).by = int(random(height));
+        boxes.get(i).letter = char(int(random(65, 65 + 26)));
     }
 }
 
@@ -142,23 +143,23 @@ void draw() {
     
     //Interating/Switching Variables
     int k = 0;
-    int image = 0;
+    int image = 1;
     
     //Combo Loop
     for (int i = 0; i < masterImg.pixels.length; i++) {
         
         //Set up the current array at the start of the loop
         if (i ==  0) {
-            image = 0;
+            image = 1;
             
             // Modulus to switch the array every other time. 
         } else if (i % kinects.get(image).width == 0) {
             
             // check which array is selected
-            if (image == 0) {
+            if (image == 1) {
                 
                 // if it's 0, switch images that we're indexing
-                image = 1;
+                image = 0;
                 
                 /* Subtract the width of the image from K so K iterates over the same
                 set of numbers twice each time. Use [k] to coontrol each image individually
@@ -172,7 +173,7 @@ void draw() {
             } else {
                 
                 // don't have to reset K when coming back to the first image
-                image = 0;
+                image = 1;
             }
         }
         
