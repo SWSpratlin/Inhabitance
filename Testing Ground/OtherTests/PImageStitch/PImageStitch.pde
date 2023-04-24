@@ -12,7 +12,7 @@ ArrayList<PImage> currentArray = new ArrayList<PImage>(2);
 int mouseLoc = 0;
 
 void setup() {
-    size(2000, 1000);
+    size(2000, 1000, P2D);
     //Set number of boxes to spawn
     //int boxNumber = 40;
     
@@ -22,7 +22,7 @@ void setup() {
     tony = loadImage("tony.jpg");
     //tony.loadPixels();
     
-    master = createImage(jay.width * 4, jay.height * 2,HSB);
+    master = createImage(jay.width * 4, jay.height * 2, RGB);
     
     currentArray.add(jay); // set Jay at index 0
     currentArray.add(tony); // set Tony at index 1
@@ -102,7 +102,7 @@ void draw() {
         int i2 = i + 1;
         int i3 = i + width;
         int i4 = i2 + width;
-        // Assign pixels from each inmage to master
+        // Assign pixels from each image to master
         if (i + master.width + 1 < master.pixels.length) {
             master.pixels[i] = currentArray.get(image).pixels[k];
             master.pixels[i2] = currentArray.get(image).pixels[k];
@@ -114,12 +114,9 @@ void draw() {
     }
     master.updatePixels();
     //only displaying the master image
-    
+    // image(master, 0,0);
     scale( -1,1);
     image(master, -master.width, 0);
-    
-    
-    
     
     //Apply methods to each box in the array
     // for (int i = 0; i < boxes.size(); i++) {

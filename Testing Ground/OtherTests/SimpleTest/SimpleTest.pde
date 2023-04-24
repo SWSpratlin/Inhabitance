@@ -11,10 +11,14 @@ PImage mouseLight;
 
 //Zero out mouse location variable to start
 int mouseLoc = 0;
+int boxNumber;
 
 //Call the Box Array
 ArrayList<Box> boxes;
 ArrayList<String> notes;
+
+IntList xPos;
+IntList yPos;
 
 void setup() {
     //Set size, 1280
@@ -52,7 +56,7 @@ void setup() {
     notes.add("Z__1.wav");
     
     //Set number of boxes to spawn
-    int boxNumber = 40;
+    boxNumber = 60;
     
     //intialize the box array
     boxes = new ArrayList<Box>(boxNumber);
@@ -88,13 +92,29 @@ void draw() {
     //Draw white circle around the mouse
     //copy/paste/adjust from "flashlight" Daniel Schiffman example
     //Not important, will be replaced with Kinect Image
+    
+    xPos = new IntList();
+    yPos = new IntList();
+    
     image(mouseLight, 0,0);
     mouseLight.loadPixels();
     for (int y = 0; y < height; y++) {
+        
+        // Apply Physics to all the boxes without another for loop
+        // Also add the x coordinates and y coordinates to arrays for comparison
+        if (y < boxNumber) {
+            boxes.get(y).lookUnder(mouseLight);
+            boxes.get(y).collisionPoint();
+            boxes.get(y).collisionVector();
+            boxes.get(y).edgeBounce();
+            boxes.get(y).display();
+            xPos.set(y,(boxes.get(y).bx));
+            yPos.set(y,(boxes.get(y).by));
+        }
         for (int x = 0; x < width; x++) {
             int loc = x + y * width;
             float b = alpha(mouseLight.pixels[loc]);
-            float maxDist = 50;
+            float maxDist = 35;
             float d = dist(x,y,mouseX,mouseY);
             float adjustBrightness = 255 * (maxDist - d) / maxDist;
             b *= adjustBrightness;
@@ -102,17 +122,10 @@ void draw() {
             color c = color(b);
             mouseLight.pixels[loc] = c;
         }
+        
     }
     mouseLight.updatePixels();
     
-    //Apply methods to each box in the array
-    for (int i = 0; i < boxes.size(); i++) {
-        boxes.get(i).lookUnder(mouseLight);
-        boxes.get(i).collisionPoint();
-        boxes.get(i).collisionVector();
-        boxes.get(i).edgeBounce();
-        boxes.get(i).display();
-    }
     // Print the framerate to the window for Performance check purposes. 
     textSize(50);
     text(frameRate, 100, 100);
