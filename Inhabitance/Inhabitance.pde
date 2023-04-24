@@ -31,7 +31,7 @@ int numDevices = 0;
 void setup() {
     // Size. Width has to be double the width of a Kinect
     //This lets 2 Kinect feeds populate next to each other
-    size(1280,480);
+    size(1280 * 2,480 * 2, P2D);
     
     //Populate Notes Array
     notes = new ArrayList<String>();
@@ -174,6 +174,7 @@ void draw() {
                 
                 // don't have to reset K when coming back to the first image
                 image = 1;
+                i += masterImg.width;
             }
         }
         
@@ -183,13 +184,24 @@ void draw() {
             k = 0;
         }
         
+        int i2 = i + 1;
+        int i3 = i + width;
+        int i4 = i2 + width;
         //Assign depth values to Master image
-        if (currentArray.get(image)[k] >= minDepth && currentArray.get(image)[k] <= maxDepth) {
-            masterImg.pixels[i] = color(255);
-        } else {
-            masterImg.pixels[i] = color(0);
+        if (i + masterImg.width + 1 < masterImg.pixels.length) {
+            if (currentArray.get(image)[k] >= minDepth && currentArray.get(image)[k] <= maxDepth) {
+                masterImg.pixels[i] = color(255);
+                masterImg.pixels[i2] = color(255);
+                masterImg.pixels[i3] = color(255);
+                masterImg.pixels[i4] = color(255);
+            } else {
+                masterImg.pixels[i] = color(0);
+                masterImg.pixels[i2] = color(0);
+                masterImg.pixels[i3] =  color(0);
+                masterImg.pixels[i4] = color(0);
+            }
+            i++;
         }
-        
         //Increment k
         k++;
     }
@@ -197,8 +209,9 @@ void draw() {
     //Update Master Image
     masterImg.updatePixels();
     
-    //Display Master Image
-    image(masterImg, 0,0);
+    //Display mirrored Master Image
+    scale( -1,1);
+    image(masterImg, -masterImg.width, 0);
     
     //Physics for Boxes
     for (int i = 0; i < boxes.size(); i++) {
