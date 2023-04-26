@@ -1,5 +1,6 @@
 //Import Point class, important
 import java.awt.Point; 
+
 //Import Sound library. Important for NoteTrack to work
 import processing.sound.*;
 
@@ -17,9 +18,6 @@ int boxNumber;
 ArrayList<Box> boxes;
 ArrayList<String> notes;
 
-IntList xPos;
-IntList yPos;
-
 void setup() {
     //Set size, 1280
     size(1280, 480);
@@ -27,6 +25,7 @@ void setup() {
     //set BG color
     background(0);
     
+    // Note names for file loading
     notes = new ArrayList<String>();
     notes.add("A__1.wav");
     notes.add("B__1.wav");
@@ -75,8 +74,6 @@ void setup() {
         mouseLight.pixels[i] = color(0);
     }
     mouseLight.updatePixels();
-    
-    
 }
 
 //Reset function for mouse click. Also randomizes letters
@@ -93,9 +90,6 @@ void draw() {
     //copy/paste/adjust from "flashlight" Daniel Schiffman example
     //Not important, will be replaced with Kinect Image
     
-    xPos = new IntList();
-    yPos = new IntList();
-    
     image(mouseLight, 0,0);
     mouseLight.loadPixels();
     for (int y = 0; y < height; y++) {
@@ -108,8 +102,6 @@ void draw() {
             boxes.get(y).collisionVector();
             boxes.get(y).edgeBounce();
             boxes.get(y).display();
-            xPos.set(y,(boxes.get(y).bx));
-            yPos.set(y,(boxes.get(y).by));
         }
         for (int x = 0; x < width; x++) {
             int loc = x + y * width;
@@ -121,8 +113,10 @@ void draw() {
             b = constrain(b, 0, 255);
             color c = color(b);
             mouseLight.pixels[loc] = c;
+            if (x < boxNumber && y < boxNumber && x!= y) {
+                boxes.get(x).boxBounce(boxes.get(y));
+            }
         }
-        
     }
     mouseLight.updatePixels();
     
