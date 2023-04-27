@@ -266,8 +266,8 @@ class Box{
         
         //Drift elimination. If the velocity is within a certain threshold
         //zero it out. Threshold should be low enough that this seems natural
-        float lowThresh = -0.04;
-        float highThresh = 0.04;
+        float highThresh = 0.07;
+        float lowThresh = -highThresh;
         
         // Variable Amp
         float varAmp = map(this.by, 0, height, 0,1);

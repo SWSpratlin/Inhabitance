@@ -150,16 +150,16 @@ void draw() {
         
         //Set up the current array at the start of the loop
         if (i ==  0) {
-            image = 1;
+            image = 0;
             
             // Modulus to switch the array every other time. 
-        } else if (i % kinects.get(image).width == 0) {
+        } else if (i % (kinects.get(image).width * 2) == 0) {
             
             // check which array is selected
-            if (image == 1) {
+            if (image ==  0) {
                 
                 // if it's 0, switch images that we're indexing
-                image = 0;
+                image = 1;
                 
                 /* Subtract the width of the image from K so K iterates over the same
                 set of numbers twice each time. Use [k] to coontrol each image individually
@@ -173,7 +173,7 @@ void draw() {
             } else {
                 
                 // don't have to reset K when coming back to the first image
-                image = 1;
+                image = 0;
                 i += masterImg.width;
             }
         }
@@ -229,7 +229,9 @@ void draw() {
     fill(255);
     textSize(20);
     text(frameRate, 10, 10);
-    stroke(255);
     strokeWeight(10);
-    line(11, 11, frameRate * 4, 11);
+    stroke(150, 150, 150);
+    line(20, 60, 240, 60);
+    stroke(255);
+    line(20, 60, frameRate * 4, 60);
 }
