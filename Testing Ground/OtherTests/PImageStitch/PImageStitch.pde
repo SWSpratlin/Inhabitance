@@ -115,8 +115,11 @@ void draw() {
     master.updatePixels();
     //only displaying the master image
     // image(master, 0,0);
+    pushMatrix();
     scale( -1,1);
     image(master, -master.width, 0);
+    popMatrix();
+    
     
     //Apply methods to each box in the array
     // for (int i = 0; i < boxes.size(); i++) {
@@ -129,10 +132,10 @@ void draw() {
 // }
     
     textSize(50);
-    text(frameRate, -1000, 50);
+    text(frameRate, 20, 50);
     strokeWeight(10);
     stroke(0);
-    line( -20, 60, -240, 60);
+    line(20, 60, 240, 60);
     stroke(255);
-    line( -20, 60, -frameRate * 4, 60);
+    line(20, 60, frameRate * 4, 60);
 }

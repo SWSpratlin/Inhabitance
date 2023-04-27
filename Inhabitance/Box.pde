@@ -61,7 +61,7 @@ class Box{
         
         //Create PImage for the Box
         imageMode(CORNER);
-        box = createImage(bW,bH, HSB);
+        box = createImage(bW,bH, RGB);
         
         //Color Letter
         fill(200);
@@ -81,7 +81,7 @@ class Box{
         box.loadPixels();
         for (int i = 0; i < box.pixels.length; i++) {
             //Make collision box transparent
-            box.pixels[i] = color(bColor, 0,0,0);
+            box.pixels[i] = color(bColor, 255,255,150);
         }
         //Update Box pixels
         box.updatePixels(); 
@@ -266,8 +266,8 @@ class Box{
         
         //Drift elimination. If the velocity is within a certain threshold
         //zero it out. Threshold should be low enough that this seems natural
-        float lowThresh = -0.04;
-        float highThresh = 0.04;
+        float highThresh = 0.07;
+        float lowThresh = -highThresh;
         
         // Variable Amp
         float varAmp = map(this.by, 0, height, 0,1);
