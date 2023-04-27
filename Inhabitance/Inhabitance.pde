@@ -108,7 +108,7 @@ void setup() {
     }
     
     //Blank image
-    masterImg = createImage(width, height, RGB);
+    masterImg = createImage(width, height, ARGB);
 }
 
 //Reset Function, will work out a different physical interface
@@ -210,8 +210,11 @@ void draw() {
     masterImg.updatePixels();
     
     //Display mirrored Master Image
+    pushMatrix();
     scale( -1,1);
     image(masterImg, -masterImg.width, 0);
+    popMatrix();
+    
     
     //Physics for Boxes
     for (int i = 0; i < boxes.size(); i++) {
@@ -222,11 +225,11 @@ void draw() {
         boxes.get(i).collisionVector();
     }
     
-    // //debugging purposes and performance checks
-    // fill(255);
-    // textSize(20);
-    // text(frameRate, 10, 10);
-    // stroke(255);
-    // strokeWeight(10);
-    // line(11, 11, frameRate * 4, 11);
+    //debugging purposes and performance checks
+    fill(255);
+    textSize(20);
+    text(frameRate, 10, 10);
+    stroke(255);
+    strokeWeight(10);
+    line(11, 11, frameRate * 4, 11);
 }
