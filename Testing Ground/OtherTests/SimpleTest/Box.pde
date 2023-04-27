@@ -63,7 +63,7 @@ class Box{
         
         //Create PImage for the Box
         imageMode(CORNER);
-        box = createImage(bW,bH, HSB);
+        box = createImage(bW,bH, ARGB);
         
         //Color Letter
         fill(200);
@@ -83,7 +83,7 @@ class Box{
         box.loadPixels();
         for (int i = 0; i < box.pixels.length; i++) {
             //Make collision box transparent
-            box.pixels[i] = color(bColor, 0,0,0);
+            box.pixels[i] = color(bColor, 255,255,150);
         }
         //Update Box pixels
         box.updatePixels(); 
@@ -121,8 +121,8 @@ class Box{
         text(letter, bx,(by + bH));
         
         //debugging text goes here
-        // String debug = "--";
-        // textSize(20);
+        // String debug = "(" + this.bx + "," + this.by + ")";
+        // textSize(10);
         // text(debug, bx, by - 1);
     }
     
@@ -279,21 +279,49 @@ class Box{
         //lotta && statements to find out if 2 values are within a range
         if (lowThresh <= velocity.x && velocity.x <= highThresh && lowThresh <= velocity.y && velocity.y <= highThresh) {
             velocity.set(0,0);
-            isMoving = false;
         }
         
         if (isMoving == true && boxNote.isPlaying() == false) {
             boxNote.play();
-            isMoving = false;
         }
         
-        float noteThresh = 0.25;
+        int trapCounter = 0;
+        float noteThresh = 0.55;
         
         if (isMoving == true && boxNote.position() > noteThresh) {
             boxNote.jump(0);
-            isMoving = false;
         }
     }
+    
+    void boxBounce(Box otherBox) {
+        
+        // if (otherBox.bx >= this.bx && otherBox.bx <= this.bx + this.bW && otherBox.by >= this.by && otherBox.by <= this.by + this.bH) {
+        //     this.velocity.x *= -1;
+        //     this.velocity.y *= -1;
+        
+        //     otherBox.acceleration.x += 10;
+        //     otherBox.acceleration.y += 10;
+        
+        //     if (this.velocity.x == 0 && this.velocity.y == 0 && otherBox.velocity.x == 0 && otherBox.velocity.y == 0) {
+        //         this.bx = int(random(0, width));
+        //         this.by = int(random(0, height));
+        ///     }
+        /// } else if (this.bx > otherBox.bx && this.bx < otherBox.bx + otherBox.bW && this.by > otherBox.by && this.by < otherBox.by + otherBox.bH) {
+        //     this.velocity.x *= -1;
+        //     this.velocity.y *= -1;
+        
+        //     otherBox.acceleration.x += 10;
+        //     otherBox.acceleration.y += 10;
+        /// }
+        int[] xCoords = new int[this.bH * this.bW];
+        int[] yCoords = new int[this.bH * this.bW];
+        for (int i = 0; i < this.bH * this.bW; i++) {
+            
+            xCoords[i] = this.bx++;
+            yCoords[i] = this.by++;
+        }
+    }
+    
     
     //bounce off the edges
     void edgeBounce() {

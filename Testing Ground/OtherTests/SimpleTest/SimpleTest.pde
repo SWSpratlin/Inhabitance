@@ -20,7 +20,7 @@ ArrayList<String> notes;
 
 void setup() {
     //Set size, 1280
-    size(1280, 480);
+    size(1280, 480, P2D);
     
     //set BG color
     background(0);
@@ -68,7 +68,7 @@ void setup() {
     }
     
     //initialize the mouseLight PImage
-    mouseLight = new PImage(width, height);
+    mouseLight = new PImage(width, height, RGB);
     mouseLight.loadPixels();
     for (int i = 0; i < mouseLight.pixels.length; i++) {
         mouseLight.pixels[i] = color(0);
@@ -113,7 +113,7 @@ void draw() {
             b = constrain(b, 0, 255);
             color c = color(b);
             mouseLight.pixels[loc] = c;
-            if (x < boxNumber && y < boxNumber && x!= y) {
+            if (x < boxNumber && y < boxNumber && y != x) {
                 boxes.get(x).boxBounce(boxes.get(y));
             }
         }
