@@ -11,7 +11,6 @@ public PApplet master = this;
 PImage mouseLight;
 
 //Zero out mouse location variable to start
-int mouseLoc = 0;
 int boxNumber;
 
 //Call the Box Array

@@ -8,7 +8,9 @@ import processing.sound.*;
 public PApplet master = this;
 
 //Create a PImage that will color the pixels around the mouse
-PImage mouseLight;
+PImage testImg1;
+PImage testImg2;
+PImage masterImg;
 
 //Zero out mouse location variable to start
 int mouseLoc = 0;
@@ -17,13 +19,11 @@ int boxNumber;
 //Call the Box Array
 ArrayList<Box> boxes;
 ArrayList<String> notes;
+ArrayList<PImage> currentArray = new ArrayList<PImage>(2);
 
 void setup() {
     //Set size, 1280
-    size(1280, 480, P2D);
-    
-    //set BG color
-    background(0);
+    size(1000, 500, P2D);
     
     // Note names for file loading
     notes = new ArrayList<String>();
@@ -67,13 +67,15 @@ void setup() {
         boxes.add(tmpBox);
     }
     
-    //initialize the mouseLight PImage
-    mouseLight = new PImage(width, height, RGB);
-    mouseLight.loadPixels();
-    for (int i = 0; i < mouseLight.pixels.length; i++) {
-        mouseLight.pixels[i] = color(0);
-    }
-    mouseLight.updatePixels();
+    //load the images to memory
+    testImg1 = loadImage("250_img1.jpg");
+    testImg2 = loadImage("250_img2.jpg");
+    masterImg = createImage(testImg1.width * 4, testImg1.height * 2, RGB);
+    
+    //Put the images into an array
+    currentArray.add(testImg1);
+    currentArray.add(testImg2);
+    
 }
 
 //Reset function for mouse click. Also randomizes letters
@@ -90,37 +92,71 @@ void draw() {
     //copy/paste/adjust from "flashlight" Daniel Schiffman example
     //Not important, will be replaced with Kinect Image
     
-    image(mouseLight, 0,0);
-    mouseLight.loadPixels();
-    for (int y = 0; y < height; y++) {
-        
-        // Apply Physics to all the boxes without another for loop
-        // Also add the x coordinates and y coordinates to arrays for comparison
-        if (y < boxNumber) {
-            boxes.get(y).lookUnder(mouseLight);
-            boxes.get(y).collisionPoint();
-            boxes.get(y).collisionVector();
-            boxes.get(y).edgeBounce();
-            boxes.get(y).display();
-        }
-        
-        for (int x = 0; x < width; x++) {
-            int loc = x + y * width;
-            float b = alpha(mouseLight.pixels[loc]);
-            float maxDist = 35;
-            float d = dist(x,y,mouseX,mouseY);
-            float adjustBrightness = 255 * (maxDist - d) / maxDist;
-            b *= adjustBrightness;
-            b = constrain(b, 0, 255);
-            color c = color(b);
-            mouseLight.pixels[loc] = c;
-            
-            if (x < boxNumber && y < boxNumber && y != x) {
-                boxes.get(x).boxBounce(boxes.get(y));
+    //Put in the Switching block with scaling implemented
+    //Apply the MouseLight Effect
+    //Apply the mirroring 
+    //figure out how to fix the mirroring issues
+    
+    //Switching Block
+    int k = 0;
+    int image = 0;
+    
+    masterImg.loadPixels();
+    
+    for (int i = 0; i < masterImg.pixels.length; i++) {
+        if (i == 0) {
+            image = 0;
+        } else if (i % (currentArray.get(image).width * 2) == 0) {
+            if (image == 0) {
+                image = 1;
+                k -= currentArray.get(image).width;
+            } else {
+                image = 0;
+                i += masterImg.width;
             }
         }
+        if (k >= currentArray.get(image).pixels.length) {
+            k = 0;
+        }
+        
+        int i2 = i + 1;
+        int i3 = i + width;
+        int i4 = i2 + width;
+        
+        if (i + masterImg.width + 1 < masterImg.pixels.length) {
+            masterImg.pixels[i] = currentArray.get(image).pixels[k];
+            masterImg.pixels[i2] = currentArray.get(image).pixels[k];
+            masterImg.pixels[i3] = currentArray.get(image).pixels[k];
+            masterImg.pixels[i4] = currentArray.get(image).pixels[k];
+            i++;
+        }
+        int mouseLoc = mouseX + mouseY * width;
+        int mouseLoc2 = mouseLoc + 1;
+        int mouseLoc3 = mouseLoc + width;
+        int mouseLoc4 = mouseLoc2 + width;
+        if (mouseLoc4 < masterImg.pixels.length) {
+            masterImg.pixels[mouseLoc] = color(255);
+            masterImg.pixels[mouseLoc2] = color(255);
+            masterImg.pixels[mouseLoc3] = color(255);
+            masterImg.pixels[mouseLoc4] = color(255);
+        }
+        k++;
     }
-    mouseLight.updatePixels();
+    masterImg.updatePixels();
+    
+    pushMatrix();
+    scale( -1,1);
+    image(masterImg, -masterImg.width, 0);
+    popMatrix();
+    
+    //Apply methods to each box in the array
+    for (int i = 0; i < boxes.size(); i++) {
+        boxes.get(i).lookUnder(masterImg);
+        boxes.get(i).collisionPoint();
+        boxes.get(i).collisionVector();
+        boxes.get(i).edgeBounce();
+        boxes.get(i).display();
+    }
     
     // Print the framerate to the window for Performance check purposes. 
     textSize(50);

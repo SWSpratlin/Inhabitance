@@ -132,7 +132,7 @@ class Box{
     void lookUnder(PImage p) {
         
         //Generate PImage (and therefore a pixels array) for the space under the box
-        PImage r = p.get(this.bx, this.by, this.bW, this.bH);
+        PImage r = p.get( -this.bx, this.by, -this.bW, this.bH);
         
         //create pixels array that can be referenced 
         px = new IntList();
@@ -269,8 +269,8 @@ class Box{
         
         //Drift elimination. If the velocity is within a certain threshold
         //zero it out. Threshold should be low enough that this seems natural
-        float highThresh = 0.07;
-        float lowThresh = highThresh * ( -1);
+        float highThresh = 0.08;
+        float lowThresh = -highThresh;
         
         // Variable Amp
         float varAmp = map(this.by, 0, height, 0,1);
