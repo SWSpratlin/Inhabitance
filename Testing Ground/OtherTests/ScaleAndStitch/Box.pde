@@ -76,7 +76,7 @@ class Box{
         noteNumber = letterNumber - 65; //convert ASCII values to ints that can access <notes>
         letter = char(letterNumber); // Assign char() a random CAPS letter
         
-        boxNote = new SoundFile(master, notes.get(noteNumber));
+        
         
         
         //Color Box pixels (mostly for debugging)
@@ -87,6 +87,18 @@ class Box{
         }
         //Update Box pixels
         box.updatePixels(); 
+    }
+    
+    // Method to load the sound file from a random array each time it is called. This should get called in setup() first
+    // then called again in whatever reset function happens.
+    void loadNote() {
+        int arrayNumber = random(10);
+        if (arrayNumber < 5) {
+            boxNote = new SoundFile(master, notes.get(noteNumber));
+        } else {
+            boxNote = new SoundFile(master, sounds.get(noteNumber));
+        }
+        
     }
     
     //Fills a Point Array with the coordinates of the entire box
