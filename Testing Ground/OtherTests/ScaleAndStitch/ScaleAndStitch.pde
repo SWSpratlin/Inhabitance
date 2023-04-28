@@ -21,6 +21,7 @@ ArrayList<Box> boxes;
 ArrayList<String> notes;
 ArrayList<PImage> currentArray = new ArrayList<PImage>(2);
 
+
 void setup() {
     //Set size, 1280
     size(1000, 500, P2D);
@@ -81,7 +82,7 @@ void setup() {
 //Reset function for mouse click. Also randomizes letters
 void mouseReleased() {
     for (int i = 0; i < boxes.size(); i++) {
-        boxes.get(i).bx = int(random(width));
+        boxes.get(i).bx = -int(random(width));
         boxes.get(i).by = int(random(height));
         boxes.get(i).letterNumber = int(random(65, 65 + 24));
     }
@@ -143,11 +144,11 @@ void draw() {
         k++;
     }
     masterImg.updatePixels();
-    
     pushMatrix();
     scale( -1,1);
-    image(masterImg, -masterImg.width, 0);
+    image(masterImg, -masterImg.width,0);
     popMatrix();
+    
     
     //Apply methods to each box in the array
     for (int i = 0; i < boxes.size(); i++) {

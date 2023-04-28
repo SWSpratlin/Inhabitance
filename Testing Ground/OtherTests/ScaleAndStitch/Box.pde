@@ -132,7 +132,7 @@ class Box{
     void lookUnder(PImage p) {
         
         //Generate PImage (and therefore a pixels array) for the space under the box
-        PImage r = p.get( -this.bx, this.by, -this.bW, this.bH);
+        PImage r = p.get( -this.bx + width - bW, this.by, this.bW, this.bH);
         
         //create pixels array that can be referenced 
         px = new IntList();
@@ -230,6 +230,9 @@ class Box{
             
             //Calculate the direction between the center point and Collision Point
             dir = PVector.sub(centerPoint, colPoint);
+            
+            //Reverse the X velocity to compensate for the mirror. 
+            dir.x *= -1;
             
             //Normalize the vector, and multiply it to create acceleration upon collision
             dir.normalize();

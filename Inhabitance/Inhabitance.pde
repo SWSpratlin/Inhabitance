@@ -80,6 +80,9 @@ void setup() {
         //Initialize Depth for current Kinect
         tempKinect.initDepth();
         
+        //Mirror the image?
+        tempKinect.enableMirror(true);
+        
         //Add the current Kinect to the Array
         kinects.add(tempKinect);
         
