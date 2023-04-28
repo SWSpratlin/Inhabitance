@@ -44,6 +44,63 @@ class Box{
     
     PFont font;
     
+    // Note names for file loading
+    ArrayList<String> notes = new ArrayList<String>();
+    notes.add("A__1.wav");
+    notes.add("B__1.wav");
+    notes.add("C__1.wav");
+    notes.add("D__1.wav");
+    notes.add("E__1.wav");
+    notes.add("F__1.wav");
+    notes.add("G__1.wav");
+    notes.add("H__1.wav");
+    notes.add("I__1.wav");
+    notes.add("J__1.wav");
+    notes.add("K__1.wav");
+    notes.add("L__1.wav");
+    notes.add("M__1.wav");
+    notes.add("N__1.wav");
+    notes.add("O__1.wav");
+    notes.add("P__1.wav");
+    notes.add("Q__1.wav");
+    notes.add("R__1.wav");
+    notes.add("S__1.wav");
+    notes.add("T__1.wav");
+    notes.add("U__1.wav");
+    notes.add("V__1.wav");
+    notes.add("W__1.wav");
+    notes.add("X__1.wav");
+    notes.add("Y__1.wav");
+    notes.add("Z__1.wav");
+    
+    ArrayList<String> sounds = new ArrayList<String>();
+    sounds.add("A__2.wav");
+    sounds.add("B__2.wav");
+    sounds.add("C__2.wav");
+    sounds.add("D__2.wav");
+    sounds.add("E__2.wav");
+    sounds.add("F__2.wav");
+    sounds.add("G__2.wav");
+    sounds.add("H__2.wav");
+    sounds.add("I__2.wav");
+    sounds.add("J__2.wav");
+    sounds.add("K__2.wav");
+    sounds.add("L__2.wav");
+    sounds.add("M__2.wav");
+    sounds.add("N__2.wav");
+    sounds.add("O__2.wav");
+    sounds.add("P__2.wav");
+    sounds.add("Q__2.wav");
+    sounds.add("R__2.wav");
+    sounds.add("S__2.wav");
+    sounds.add("T__2.wav");
+    sounds.add("U__2.wav");
+    sounds.add("V__2.wav");
+    sounds.add("W__2.wav");
+    sounds.add("X__2.wav");
+    sounds.add("Y__2.wav");
+    sounds.add("Z__2.wav");
+    
     //Constructor. Called in SETUP
     //Intakes spawn coordinates, size, color
     Box(int x_, int y_, int sizeW, int sizeH, int bColor) {

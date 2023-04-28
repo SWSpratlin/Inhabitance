@@ -18,7 +18,6 @@ int boxNumber;
 
 //Call the Box Array
 ArrayList<Box> boxes;
-ArrayList<String> notes;
 ArrayList<PImage> currentArray = new ArrayList<PImage>(2);
 
 
@@ -26,34 +25,7 @@ void setup() {
     //Set size, 1280
     size(1000, 500, P2D);
     
-    // Note names for file loading
-    notes = new ArrayList<String>();
-    notes.add("A__1.wav");
-    notes.add("B__1.wav");
-    notes.add("C__1.wav");
-    notes.add("D__1.wav");
-    notes.add("E__1.wav");
-    notes.add("F__1.wav");
-    notes.add("G__1.wav");
-    notes.add("H__1.wav");
-    notes.add("I__1.wav");
-    notes.add("J__1.wav");
-    notes.add("K__1.wav");
-    notes.add("L__1.wav");
-    notes.add("M__1.wav");
-    notes.add("N__1.wav");
-    notes.add("O__1.wav");
-    notes.add("P__1.wav");
-    notes.add("Q__1.wav");
-    notes.add("R__1.wav");
-    notes.add("S__1.wav");
-    notes.add("T__1.wav");
-    notes.add("U__1.wav");
-    notes.add("V__1.wav");
-    notes.add("W__1.wav");
-    notes.add("X__1.wav");
-    notes.add("Y__1.wav");
-    notes.add("Z__1.wav");
+    
     
     //Set number of boxes to spawn
     boxNumber = 60;
