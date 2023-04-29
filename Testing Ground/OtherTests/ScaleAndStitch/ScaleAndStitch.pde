@@ -37,6 +37,7 @@ void setup() {
     for (int i = 0; i < boxNumber; i++) {
         Box tmpBox = new Box(int(random(width)), int(random(height)), 20, 20, 130);
         tmpBox.getCoord();
+        tmpBox.loadNote();
         boxes.add(tmpBox);
     }
     
@@ -54,9 +55,10 @@ void setup() {
 //Reset function for mouse click. Also randomizes letters
 void mouseReleased() {
     for (int i = 0; i < boxes.size(); i++) {
-        boxes.get(i).bx = -int(random(width));
+        boxes.get(i).bx = int(random(width));
         boxes.get(i).by = int(random(height));
         boxes.get(i).letterNumber = int(random(65, 65 + 24));
+        boxes.get(i).loadNote();
     }
 }
 
