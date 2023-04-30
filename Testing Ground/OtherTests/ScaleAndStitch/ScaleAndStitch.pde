@@ -38,7 +38,6 @@ void setup() {
     //intialize the box array
     boxes = new ArrayList<Box>(boxNumber);
     
-    
     //Sound arrays
     notes = new ArrayList<String>();
     notes.add("A__1.wav");
@@ -158,15 +157,26 @@ void setup() {
 
 //Reset function for mouse click. Also randomizes letters
 void mouseReleased() {
+    
+    //Increment the counter to track the resets
     counter++;
+    
+    //Iterate through all the boxes
     for (int i = 0; i < boxes.size(); i++) {
+        
+        //Only shuffle the position on a normal reset
         boxes.get(i).bx = int(random(width));
         boxes.get(i).by = int(random(height));
+        
+        //If the counter hits 5, reset the letters and sounds attached to them
+        //you only get 12 of these, so spread them out accordingly
         if (counter >= 5) {
             boxes.get(i).letterNumber = int(random(65, 65 + 24));
             boxes.get(i).noteNumber =  boxes.get(i).letterNumber - 65;
             boxes.get(i).letter = char(boxes.get(i).letterNumber);
             boxes.get(i).arrayNumber = int(random(10));
+            
+            // Note resets. This is where the problems lie, so We'll revisit this later.
             boxes.get(i).boxNote.stop();
             boxes.get(i).boxNote = null;
             while(boxes.get(i).boxNote == null) {
@@ -185,8 +195,9 @@ void mouseReleased() {
                 }
             }
         }
-        
     }
+    // Reset the counter every 5 increments, and hopefully call the GC. God knows GC won't actually
+    // do anything here. 
     if (counter >= 5) {
         counter = 0;
         System.gc();
