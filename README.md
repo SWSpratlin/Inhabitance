@@ -5,6 +5,16 @@ Unsure what use anyone else will have for this, but here it is.
 
 CHANGELOG
 
+04/27/2023
+Cleanup and Adding "ScaleAndStitch" testing file
+- Solved scaling issues
+- solved mirroring issues
+- deleted unused testing files to free up Data space
+- Implemented ScaleAndStitch to solve mirroring and scaling simultanously
+- Added "loadNote()" method to Box Class to handle randomization of Sound sets
+- Added additional sound set in "sounds" array
+- Moved initialization of Sound arrays into Box constructor
+
 04/05/2023
 Added SimpleTest sketch for easier testing
 - Fixed collision detection (mostly)
