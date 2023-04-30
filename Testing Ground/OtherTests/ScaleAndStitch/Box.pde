@@ -22,6 +22,7 @@ class Box{
     char letter; //Random letter variable, global so it can change
     int letterNumber; //Number associated with each letter. 
     int noteNumber; // ASCII number to access the <notes> array
+    int arrayNumber; // Choose which array is pulled from
     
     SoundFile boxNote;
     
@@ -43,13 +44,6 @@ class Box{
     float mass = 1.5; //mass, just to find out if it helps. (it doesn't really)
     
     PFont font;
-    
-    // Note names for file loading
-    ArrayList<String> notes;
-    
-    
-    ArrayList<String> sounds;
-    
     
     //Constructor. Called in SETUP
     //Intakes spawn coordinates, size, color
@@ -82,61 +76,8 @@ class Box{
         letterNumber = int(random(65, 65 + 26)); //generate ASCII values for char(). CAPS. 
         noteNumber = letterNumber - 65; //convert ASCII values to ints that can access <notes>
         letter = char(letterNumber); // Assign char() a random CAPS letter
+        arrayNumber = int(random(10));
         
-        notes = new ArrayList<String>();
-        notes.add("A__1.wav");
-        notes.add("B__1.wav");
-        notes.add("C__1.wav");
-        notes.add("D__1.wav");
-        notes.add("E__1.wav");
-        notes.add("F__1.wav");
-        notes.add("G__1.wav");
-        notes.add("H__1.wav");
-        notes.add("I__1.wav");
-        notes.add("J__1.wav");
-        notes.add("K__1.wav");
-        notes.add("L__1.wav");
-        notes.add("M__1.wav");
-        notes.add("N__1.wav");
-        notes.add("O__1.wav");
-        notes.add("P__1.wav");
-        notes.add("Q__1.wav");
-        notes.add("R__1.wav");
-        notes.add("S__1.wav");
-        notes.add("T__1.wav");
-        notes.add("U__1.wav");
-        notes.add("V__1.wav");
-        notes.add("W__1.wav");
-        notes.add("X__1.wav");
-        notes.add("Y__1.wav");
-        notes.add("Z__1.wav");
-        sounds = new ArrayList<String>();\
-        sounds.add("A__2.wav");
-        sounds.add("B__2.wav");
-        sounds.add("C__2.wav");
-        sounds.add("D__2.wav");
-        sounds.add("E__2.wav");
-        sounds.add("F__2.wav");
-        sounds.add("G__2.wav");
-        sounds.add("H__2.wav");
-        sounds.add("I__2.wav");
-        sounds.add("J__2.wav");
-        sounds.add("K__2.wav");
-        sounds.add("L__2.wav");
-        sounds.add("M__2.wav");
-        sounds.add("N__2.wav");
-        sounds.add("O__2.wav");
-        sounds.add("P__2.wav");
-        sounds.add("Q__2.wav");
-        sounds.add("R__2.wav");
-        sounds.add("S__2.wav");
-        sounds.add("T__2.wav");
-        sounds.add("U__2.wav");
-        sounds.add("V__2.wav");
-        sounds.add("W__2.wav");
-        sounds.add("X__2.wav");
-        sounds.add("Y__2.wav");
-        sounds.add("Z__2.wav");
         
         //Color Box pixels (mostly for debugging)
         box.loadPixels();
@@ -148,20 +89,8 @@ class Box{
         box.updatePixels(); 
     }
     
-    // Method to load the sound file from a random array each time it is called. This should get called in setup() first
-    // then called again in whatever reset function happens.
-    void loadNote() {
-        int arrayNumber = int(random(10));
-        if (arrayNumber < 5) {
-            boxNote = new SoundFile(master, notes.get(noteNumber));
-        } else {
-            boxNote = new SoundFile(master, sounds.get(noteNumber));
-        }
-        
-    }
-    
     //Fills a Point Array with the coordinates of the entire box
-    //IN THE ORDER they are listed as per the Pixel array
+    //INTHE ORDER they are listed as per the Pixel array
     //Call this in SETUP to avoid redrawing the coordinate array every frame
     void getCoord() {
         
@@ -212,9 +141,9 @@ class Box{
     
     /*Method for finding the first white pixel, and it's location
     WITHIN the Box. Will use PVector(?) to apply a vector
-    from the relationship to the center. 
+    fromthe relationship to the center. 
     
-    Must be called in DRAW for collisionVector to be 
+    Mustbe called in DRAW for collisionVector to be 
     functional, preferably before collisionVector*/
     Point collisionPoint() {
         
@@ -264,7 +193,7 @@ class Box{
             }
         }
         
-        //if there are no bright pixels, return null
+        //ifthere are no bright pixels, return null
         cPoint = null;
         return null;
     }
@@ -311,7 +240,7 @@ class Box{
             isMoving = true;
             
         } else {
-            //If there is no collision, make sure the directional vector is zeroed out. 
+            //Ifthere is no collision, make sure the directional vector is zeroed out. 
             //Causes drift without this.
             dir.set(0,0);
             isMoving = false;
@@ -347,7 +276,7 @@ class Box{
         float lowThresh = -highThresh;
         
         // Variable Amp
-        float varAmp = map(this.by, 0, height, 0,1);
+        float varAmp = map(this.by, 0, height, 1,0);
         boxNote.amp(varAmp);
         
         //lotta && statements to find out if 2 values are within a range
@@ -370,30 +299,23 @@ class Box{
     void boxBounce(Box otherBox) {
         
         // if (otherBox.bx >= this.bx && otherBox.bx <= this.bx + this.bW && otherBox.by >= this.by && otherBox.by <= this.by + this.bH) {
-        //     this.velocity.x *= -1;
-        //     this.velocity.y *= -1;
+        this.velocity.x *= -1;
+        this.velocity.y *= -1;
         
-        //     otherBox.acceleration.x += 10;
-        //     otherBox.acceleration.y += 10;
+        otherBox.acceleration.x += 10;
+        otherBox.acceleration.y += 10;
         
-        //     if (this.velocity.x == 0 && this.velocity.y == 0 && otherBox.velocity.x == 0 && otherBox.velocity.y == 0) {
-        //         this.bx = int(random(0, width));
-        //         this.by = int(random(0, height));
-        ///     }
-        /// } else if (this.bx > otherBox.bx && this.bx < otherBox.bx + otherBox.bW && this.by > otherBox.by && this.by < otherBox.by + otherBox.bH) {
-        //     this.velocity.x *= -1;
-        //     this.velocity.y *= -1;
-        
-        //     otherBox.acceleration.x += 10;
-        //     otherBox.acceleration.y += 10;
-        /// }
-        int[] xCoords = new int[this.bH * this.bW];
-        int[] yCoords = new int[this.bH * this.bW];
-        for (int i = 0; i < this.bH * this.bW; i++) {
+        if (this.velocity.x == 0 && this.velocity.y == 0 && otherBox.velocity.x == 0 && otherBox.velocity.y == 0) {
+            this.bx = int(random(0, width));
+            this.by = int(random(0, height));
+        } else if (this.bx > otherBox.bx && this.bx < otherBox.bx + otherBox.bW && this.by > otherBox.by && this.by < otherBox.by + otherBox.bH) {
+            this.velocity.x *= -1;
+            this.velocity.y *= -1;
             
-            xCoords[i] = this.bx++;
-            yCoords[i] = this.by++;
+            otherBox.acceleration.x += 10;
+            otherBox.acceleration.y += 10;
         }
+        
     }
     
     

@@ -22,6 +22,7 @@ class Box{
     char letter; //Random letter variable, global so it can change
     int letterNumber; //Number associated with each letter. 
     int noteNumber; // ASCII number to access the <notes> array
+    int arrayNumber; // Choose which array is pulled from
     
     SoundFile boxNote;
     
@@ -32,6 +33,8 @@ class Box{
     PVector velocity;
     PVector acceleration;
     PVector friction = new PVector(0,0);
+    
+    float aMult;
     
     // Boolean for sound methods. 
     boolean hasMoved = false;
@@ -61,7 +64,7 @@ class Box{
         
         //Create PImage for the Box
         imageMode(CORNER);
-        box = createImage(bW,bH, RGB);
+        box = createImage(bW,bH, ARGB);
         
         //Color Letter
         fill(200);
@@ -73,8 +76,7 @@ class Box{
         letterNumber = int(random(65, 65 + 26)); //generate ASCII values for char(). CAPS. 
         noteNumber = letterNumber - 65; //convert ASCII values to ints that can access <notes>
         letter = char(letterNumber); // Assign char() a random CAPS letter
-        
-        boxNote = new SoundFile(master, notes.get(noteNumber));
+        arrayNumber = int(random(10));
         
         
         //Color Box pixels (mostly for debugging)
@@ -88,7 +90,7 @@ class Box{
     }
     
     //Fills a Point Array with the coordinates of the entire box
-    //IN THE ORDER they are listed as per the Pixel array
+    //INTHE ORDER they are listed as per the Pixel array
     //Call this in SETUP to avoid redrawing the coordinate array every frame
     void getCoord() {
         
@@ -119,8 +121,8 @@ class Box{
         text(letter, bx,(by + bH));
         
         //debugging text goes here
-        // String debug = "--";
-        // textSize(20);
+        // String debug = "(" + this.bx + "," + this.by + ")";
+        // textSize(10);
         // text(debug, bx, by - 1);
     }
     
@@ -130,7 +132,7 @@ class Box{
     void lookUnder(PImage p) {
         
         //Generate PImage (and therefore a pixels array) for the space under the box
-        PImage r = p.get(this.bx, this.by, this.bW, this.bH);
+        PImage r = p.get( -this.bx + width - bW, this.by, this.bW, this.bH);
         
         //create pixels array that can be referenced 
         px = new IntList();
@@ -139,9 +141,9 @@ class Box{
     
     /*Method for finding the first white pixel, and it's location
     WITHIN the Box. Will use PVector(?) to apply a vector
-    from the relationship to the center. 
+    fromthe relationship to the center. 
     
-    Must be called in DRAW for collisionVector to be 
+    Mustbe called in DRAW for collisionVector to be 
     functional, preferably before collisionVector*/
     Point collisionPoint() {
         
@@ -177,6 +179,7 @@ class Box{
                         sumX += collisionArrayX.get(o);
                         sumY += collisionArrayY.get(o);
                     }
+                    aMult = map(collisionArrayX.size(), 1,(bW * 2), 1, 15);
                     
                     //assign cPoint as the mean of the arrays rather than
                     // the first bright pixel in each pass. normalizes collision vector                
@@ -190,7 +193,7 @@ class Box{
             }
         }
         
-        //if there are no bright pixels, return null
+        //ifthere are no bright pixels, return null
         cPoint = null;
         return null;
     }
@@ -206,7 +209,7 @@ class Box{
         
         //Acceleration coeffecient for how much speed picks up after collision
         //Change between 8 and 20 for best results
-        float aMult = 8;
+        //aMult = 8;
         
         //speed limiter so things don't fly away
         //Change between 3 and 10 for best results
@@ -228,13 +231,16 @@ class Box{
             //Calculate the direction between the center point and Collision Point
             dir = PVector.sub(centerPoint, colPoint);
             
+            //Reverse the X velocity to compensate for the mirror. 
+            dir.x *= -1;
+            
             //Normalize the vector, and multiply it to create acceleration upon collision
             dir.normalize();
             dir.mult(aMult);
             isMoving = true;
             
         } else {
-            //If there is no collision, make sure the directional vector is zeroed out. 
+            //Ifthere is no collision, make sure the directional vector is zeroed out. 
             //Causes drift without this.
             dir.set(0,0);
             isMoving = false;
@@ -266,30 +272,49 @@ class Box{
         
         //Drift elimination. If the velocity is within a certain threshold
         //zero it out. Threshold should be low enough that this seems natural
-        float highThresh = 0.07;
+        float highThresh = 0.08;
         float lowThresh = -highThresh;
         
         // Variable Amp
-        float varAmp = map(this.by, 0, height, 0,1);
+        float varAmp = map(this.by, 0, height, 1,0);
         boxNote.amp(varAmp);
         
         //lotta && statements to find out if 2 values are within a range
         if (lowThresh <= velocity.x && velocity.x <= highThresh && lowThresh <= velocity.y && velocity.y <= highThresh) {
             velocity.set(0,0);
-            isMoving = false;
         }
         
         if (isMoving == true && boxNote.isPlaying() == false) {
             boxNote.play();
-            isMoving = false;
         }
         
-        float noteThresh = 0.25;
+        float noteThresh = 0.55;
         
         if (isMoving == true && boxNote.position() > noteThresh) {
             boxNote.jump(0);
-            isMoving = false;
         }
+    }
+    
+    void boxBounce(Box otherBox) {
+        
+        // if (otherBox.bx >= this.bx && otherBox.bx <= this.bx + this.bW && otherBox.by >= this.by && otherBox.by <= this.by + this.bH) {
+        this.velocity.x *= -1;
+        this.velocity.y *= -1;
+        
+        otherBox.acceleration.x += 10;
+        otherBox.acceleration.y += 10;
+        
+        if (this.velocity.x == 0 && this.velocity.y == 0 && otherBox.velocity.x == 0 && otherBox.velocity.y == 0) {
+            this.bx = int(random(0, width));
+            this.by = int(random(0, height));
+        } else if (this.bx > otherBox.bx && this.bx < otherBox.bx + otherBox.bW && this.by > otherBox.by && this.by < otherBox.by + otherBox.bH) {
+            this.velocity.x *= -1;
+            this.velocity.y *= -1;
+            
+            otherBox.acceleration.x += 10;
+            otherBox.acceleration.y += 10;
+        }
+        
     }
     
     //bounce off the edges

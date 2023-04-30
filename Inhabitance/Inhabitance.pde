@@ -21,9 +21,14 @@ ArrayList<Kinect> kinects;
 //Boxes and Notes to assign
 ArrayList<Box> boxes;
 ArrayList<String> notes;
+ArrayList<String> sounds;
+ArrayList<String> sounds2;
 
 //Number of Boxes to spawn
 int boxNumber = 60;
+
+// Reset Counter to space out sound object creation
+int counter = 0;
 
 //Device variables
 int numDevices = 0;
@@ -33,7 +38,7 @@ void setup() {
     //This lets 2 Kinect feeds populate next to each other
     size(1280 * 2,480 * 2, P2D);
     
-    //Populate Notes Array
+    //Sound arrays
     notes = new ArrayList<String>();
     notes.add("A__1.wav");
     notes.add("B__1.wav");
@@ -62,6 +67,62 @@ void setup() {
     notes.add("Y__1.wav");
     notes.add("Z__1.wav");
     
+    sounds = new ArrayList<String>();
+    sounds.add("A__2.wav");
+    sounds.add("B__2.wav");
+    sounds.add("C__2.wav");
+    sounds.add("D__2.wav");
+    sounds.add("E__2.wav");
+    sounds.add("F__2.wav");
+    sounds.add("G__2.wav");
+    sounds.add("H__2.wav");
+    sounds.add("I__2.wav");
+    sounds.add("J__2.wav");
+    sounds.add("K__2.wav");
+    sounds.add("L__2.wav");
+    sounds.add("M__2.wav");
+    sounds.add("N__2.wav");
+    sounds.add("O__2.wav");
+    sounds.add("P__2.wav");
+    sounds.add("Q__2.wav");
+    sounds.add("R__2.wav");
+    sounds.add("S__2.wav");
+    sounds.add("T__2.wav");
+    sounds.add("U__2.wav");
+    sounds.add("V__2.wav");
+    sounds.add("W__2.wav");
+    sounds.add("X__2.wav");
+    sounds.add("Y__2.wav");
+    sounds.add("Z__2.wav");
+    
+    sounds2 = new ArrayList<String>();
+    sounds2.add("A__3.wav");
+    sounds2.add("B__3.wav");
+    sounds2.add("C__3.wav");
+    sounds2.add("D__3.wav");
+    sounds2.add("E__3.wav");
+    sounds2.add("F__3.wav");
+    sounds2.add("G__3.wav");
+    sounds2.add("H__3.wav");
+    sounds2.add("I__3.wav");
+    sounds2.add("J__3.wav");
+    sounds2.add("K__3.wav");
+    sounds2.add("L__3.wav");
+    sounds2.add("M__3.wav");
+    sounds2.add("N__3.wav");
+    sounds2.add("O__3.wav");
+    sounds2.add("P__3.wav");
+    sounds2.add("Q__3.wav");
+    sounds2.add("R__3.wav");
+    sounds2.add("S__3.wav");
+    sounds2.add("T__3.wav");
+    sounds2.add("U__3.wav");
+    sounds2.add("V__3.wav");
+    sounds2.add("W__3.wav");
+    sounds2.add("X__3.wav");
+    sounds2.add("Y__3.wav");
+    sounds2.add("Z__3.wav");
+    
     //KInect initialization
     numDevices = Kinect.countDevices();
     println(numDevices);
@@ -79,9 +140,6 @@ void setup() {
         
         //Initialize Depth for current Kinect
         tempKinect.initDepth();
-        
-        //Mirror the image?
-        tempKinect.enableMirror(true);
         
         //Add the current Kinect to the Array
         kinects.add(tempKinect);
@@ -103,6 +161,20 @@ void setup() {
         //Temp Boxes, spawn at random places on screen
         Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 15, 150);
         
+        //Assign Sounds, dependent on the Array they're pulling from. 
+        if (tmpBox.arrayNumber <= 3) {
+            SoundFile tempSound = new SoundFile(this, notes.get(tmpBox.noteNumber), false);
+            tmpBox.boxNote = tempSound;
+            tempSound = null;
+        } else if (tmpBox.arrayNumber >= 4 && tmpBox.arrayNumber <= 7) {
+            SoundFile tempSound = new SoundFile(this, sounds.get(tmpBox.noteNumber), false);
+            tmpBox.boxNote = tempSound;
+            tempSound = null;
+        } else if (tmpBox.arrayNumber >= 8) {
+            SoundFile tempSound = new SoundFile(this, sounds2.get(tmpBox.noteNumber), false);
+            tmpBox.boxNote = tempSound;
+            tempSound = null;
+        }
         // Populate the Coordinate Array for each letter
         tmpBox.getCoord();
         
@@ -117,10 +189,51 @@ void setup() {
 //Reset Function, will work out a different physical interface
 //at a later time. Possibly Arduino Button. 
 void mouseReleased() {
+    
+    //Increment the counter to track the resets
+    counter++;
+    
+    //Iterate through all the boxes
     for (int i = 0; i < boxes.size(); i++) {
+        
+        //Only shuffle the position on a normal reset
         boxes.get(i).bx = int(random(width));
         boxes.get(i).by = int(random(height));
-        boxes.get(i).letter = char(int(random(65, 65 + 26)));
+        
+        //If the counter hits 5, reset the letters and sounds attached to them
+        //you only get 12 of these, so spread them out accordingly
+        if (counter >= 5) {
+            boxes.get(i).letterNumber = int(random(65, 65 + 24));
+            boxes.get(i).noteNumber =  boxes.get(i).letterNumber - 65;
+            boxes.get(i).letter = char(boxes.get(i).letterNumber);
+            boxes.get(i).arrayNumber = int(random(10));
+            
+            // Note resets. This is where the problems lie, so We'll revisit this later.
+            boxes.get(i).boxNote.stop();
+            boxes.get(i).boxNote = null;
+            while(boxes.get(i).boxNote == null) {
+                if (boxes.get(i).arrayNumber <= 3) {
+                    SoundFile tempSound = new SoundFile(this, notes.get(boxes.get(i).noteNumber), false);
+                    boxes.get(i).boxNote = tempSound;
+                    tempSound = null;
+                } else if (boxes.get(i).arrayNumber >= 4 && boxes.get(i).arrayNumber <= 7) {
+                    SoundFile tempSound = new SoundFile(this, sounds.get(boxes.get(i).noteNumber), false);
+                    boxes.get(i).boxNote = tempSound;
+                    tempSound = null;
+                } else if (boxes.get(i).arrayNumber >= 8) {
+                    SoundFile tempSound = new SoundFile(this, sounds2.get(boxes.get(i).noteNumber), false);
+                    boxes.get(i).boxNote = tempSound;
+                    tempSound = null;
+                }
+            }
+        }
+    }
+    // Reset the counter every 5 increments, and hopefully call the GC. God knows GC won't actually
+    // do anything here. 
+    if (counter >= 5) {
+        counter = 0;
+        System.gc();
+        //exit();
     }
 }
 

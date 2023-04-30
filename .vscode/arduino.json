@@ -1,0 +1,5 @@
+{
+    "board": "arduino:avr:uno",
+    "port": "/dev/tty.usbmodem83201",
+    "sketch": "Testing Ground/OtherTests/ScaleAndStitch/ResetButton/ResetButton.ino"
+}
