@@ -2,18 +2,23 @@ import processing.sound.*;
 import java.awt.Point; 
 import org.openkinect.freenect.*;
 import org.openkinect.processing.*;
+import processing.serial.*;
+
 
 public PApplet master = this;
 
 //Master Image
 PImage masterImg;
 
+//Set up arduino
+Serial arduino;
+
 //Array to store the Int arrays for the Switching block
 ArrayList<int[]> currentArray = new ArrayList<int[]>();
 
 //Depth Thresholds
 float minDepth =  300;
-float maxDepth = 800;
+float maxDepth = 9600;
 
 //Kinects to Interate through
 ArrayList<Kinect> kinects;
@@ -35,8 +40,9 @@ int numDevices = 0;
 
 void setup() {
     // Size. Width has to be double the width of a Kinect
-    //This lets 2 Kinect feeds populate next to each other
-    size(1280 * 2,480 * 2, P2D);
+    // This lets 2 Kinect feeds populate next to each other
+    // Scale by 2 to increase size
+    size(640 * 4,480 * 2, P2D);
     
     //Sound arrays
     notes = new ArrayList<String>();
@@ -131,7 +137,7 @@ void setup() {
     kinects = new ArrayList<Kinect>();
     
     //Iterate through as many Kinects as are connected
-    for (int i = 0; i < numDevices; i++) {
+    for (int i = 0; i < 2; i++) {
         //Initialize object for each Kinect detected
         Kinect tempKinect = new Kinect(this);
         
@@ -184,6 +190,10 @@ void setup() {
     
     //Blank image
     masterImg = createImage(width, height, ARGB);
+    
+    //Initialize Arduino Object with serial Port
+    printArray(Serial.list());
+    //arduino = new Serial(this, Serial.list[0], 9600);
 }
 
 //Reset Function, will work out a different physical interface
@@ -235,6 +245,10 @@ void mouseReleased() {
         System.gc();
         //exit();
     }
+}
+
+void serialEvent() {
+    
 }
 
 //Calibration Controls
