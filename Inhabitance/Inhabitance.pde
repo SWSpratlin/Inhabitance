@@ -193,7 +193,7 @@ void setup() {
     
     //Initialize Arduino Object with serial Port
     printArray(Serial.list());
-    //arduino = new Serial(this, Serial.list[0], 9600);
+    arduino = new Serial(this, Serial.list()[0], 115200);
 }
 
 //Reset Function, will work out a different physical interface
@@ -248,6 +248,56 @@ void mouseReleased() {
 }
 
 void serialEvent() {
+    if (arduino.available() > 0) {
+        arduino.readString();
+        if (arduino.readString() != null) {
+            //Increment the counter to track the resets
+            counter++;
+            
+            //Iterate through all the boxes
+            for (inti = 0; i < boxes.size(); i++) {
+                
+                //Only shuffle the position on a normal reset
+                boxes.get(i).bx = int(random(width));
+                boxes.get(i).by = int(random(height));
+                
+                //If thecounter hits 5, reset the letters and sounds attached to them
+                //you only get 12 of these, so spread them out accordingly
+                if (counter >= 10) {
+                    boxes.get(i).letterNumber = int(random(65, 65 + 24));
+                    boxes.get(i).noteNumber =  boxes.get(i).letterNumber - 65;
+                    boxes.get(i).letter = char(boxes.get(i).letterNumber);
+                    boxes.get(i).arrayNumber = int(random(10));
+                    
+                    // Note resets. This is where the problems lie, so We'll revisit this later.
+                    boxes.get(i).boxNote.stop();
+                    boxes.get(i).boxNote = null;
+                    while(boxes.get(i).boxNote == null) {
+                        if (boxes.get(i).arrayNumber <= 3) {
+                            SoundFile tempSound = new SoundFile(this, notes.get(boxes.get(i).noteNumber), false);
+                            boxes.get(i).boxNote = tempSound;
+                            tempSound = null;
+                        } else if (boxes.get(i).arrayNumber >= 4 && boxes.get(i).arrayNumber <= 7) {
+                            SoundFile tempSound = new SoundFile(this, sounds.get(boxes.get(i).noteNumber), false);
+                            boxes.get(i).boxNote = tempSound;
+                            tempSound = null;
+                        } else if (boxes.get(i).arrayNumber >= 8) {
+                            SoundFile tempSound = new SoundFile(this, sounds2.get(boxes.get(i).noteNumber), false);
+                            boxes.get(i).boxNote = tempSound;
+                            tempSound = null;
+                        }
+                    }
+                }
+            }
+            // Resetthe counter every 5 increments, and hopefully call the GC. God knows GC won't actually
+            // do anything here. 
+            if (counter >= 10) {
+                counter = 0;
+                System.gc();
+                //exit();
+            }
+        }
+    }
     
 }
 
