@@ -335,7 +335,7 @@ class Box{
             this.by = 0;
             velocity.y *= -4;
         } else if (this.by + bH >= height) {
-            this.by = height - bH;
+            this.by = (height) - bH;
             velocity.y *= -4;
         }
     }

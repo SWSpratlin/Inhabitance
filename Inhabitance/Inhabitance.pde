@@ -18,7 +18,7 @@ ArrayList<int[]> currentArray = new ArrayList<int[]>();
 
 //Depth Thresholds
 float minDepth =  300;
-float maxDepth = 9600;
+float maxDepth = 960;
 
 //Kinects to Interate through
 ArrayList<Kinect> kinects;
@@ -42,7 +42,9 @@ void setup() {
     // Size. Width has to be double the width of a Kinect
     // This lets 2 Kinect feeds populate next to each other
     // Scale by 2 to increase size
+    fullScreen(P2D, SPAN);
     size(640 * 4,480 * 2, P2D);
+    surface.setLocation(0,0);
     
     //Sound arrays
     notes = new ArrayList<String>();
