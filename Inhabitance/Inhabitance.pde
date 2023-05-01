@@ -202,7 +202,7 @@ void mouseReleased() {
         
         //If the counter hits 5, reset the letters and sounds attached to them
         //you only get 12 of these, so spread them out accordingly
-        if (counter >= 5) {
+        if (counter >= 10) {
             boxes.get(i).letterNumber = int(random(65, 65 + 24));
             boxes.get(i).noteNumber =  boxes.get(i).letterNumber - 65;
             boxes.get(i).letter = char(boxes.get(i).letterNumber);
@@ -230,7 +230,7 @@ void mouseReleased() {
     }
     // Reset the counter every 5 increments, and hopefully call the GC. God knows GC won't actually
     // do anything here. 
-    if (counter >= 5) {
+    if (counter >= 10) {
         counter = 0;
         System.gc();
         //exit();
