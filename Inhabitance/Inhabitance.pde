@@ -18,7 +18,7 @@ ArrayList<int[]> currentArray = new ArrayList<int[]>();
 
 //Depth Thresholds
 float minDepth =  300;
-float maxDepth = 9600;
+float maxDepth = 960;
 
 //Kinects to Interate through
 ArrayList<Kinect> kinects;
@@ -42,7 +42,9 @@ void setup() {
     // Size. Width has to be double the width of a Kinect
     // This lets 2 Kinect feeds populate next to each other
     // Scale by 2 to increase size
+    fullScreen(P2D, SPAN);
     size(640 * 4,480 * 2, P2D);
+    surface.setLocation(0,0);
     
     //Sound arrays
     notes = new ArrayList<String>();
@@ -165,7 +167,7 @@ void setup() {
     for (int i = 0; i < boxNumber; i++) {
         
         //Temp Boxes, spawn at random places on screen
-        Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 15, 150);
+        Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 15, 0);
         
         //Assign Sounds, dependent on the Array they're pulling from. 
         if (tmpBox.arrayNumber <= 3) {
@@ -193,7 +195,7 @@ void setup() {
     
     //Initialize Arduino Object with serial Port
     printArray(Serial.list());
-    arduino = new Serial(this, Serial.list()[0], 115200);
+    arduino = new Serial(this, Serial.list()[7], 115200);
 }
 
 //Reset Function, will work out a different physical interface
@@ -247,15 +249,15 @@ void mouseReleased() {
     }
 }
 
-void serialEvent() {
+void resetButton() {
     if (arduino.available() > 0) {
         arduino.readString();
-        if (arduino.readString() != null) {
+        if (arduino.readString() == null) {
             //Increment the counter to track the resets
             counter++;
             
             //Iterate through all the boxes
-            for (inti = 0; i < boxes.size(); i++) {
+            for (int i = 0; i < boxes.size(); i++) {
                 
                 //Only shuffle the position on a normal reset
                 boxes.get(i).bx = int(random(width));
@@ -297,6 +299,7 @@ void serialEvent() {
                 //exit();
             }
         }
+        println(arduino.available() + "data: " + arduino.readString());
     }
     
 }
@@ -395,6 +398,7 @@ void draw() {
     image(masterImg, -masterImg.width, 0);
     popMatrix();
     
+    resetButton();
     
     //Physics for Boxes
     for (int i = 0; i < boxes.size(); i++) {
@@ -406,12 +410,12 @@ void draw() {
     }
     
     //debugging purposes and performance checks
-    fill(255);
-    textSize(20);
-    text(frameRate, 10, 10);
-    strokeWeight(10);
-    stroke(150, 150, 150);
-    line(20, 60, 240, 60);
-    stroke(255);
-    line(20, 60, frameRate * 4, 60);
+    // fill(255);
+    // textSize(20);
+    // text(frameRate, 10, 10);
+    // strokeWeight(10);
+    // stroke(150, 150, 150);
+    // line(20, 60, 240, 60);
+    // stroke(255);
+    // line(20, 60, frameRate * 4, 60);
 }
