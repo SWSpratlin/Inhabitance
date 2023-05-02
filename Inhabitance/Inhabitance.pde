@@ -195,7 +195,7 @@ void setup() {
     
     //Initialize Arduino Object with serial Port
     printArray(Serial.list());
-    arduino = new Serial(this, Serial.list()[0], 115200);
+    arduino = new Serial(this, Serial.list()[7], 115200);
 }
 
 //Reset Function, will work out a different physical interface
@@ -249,15 +249,15 @@ void mouseReleased() {
     }
 }
 
-void serialEvent() {
+void resetButton() {
     if (arduino.available() > 0) {
         arduino.readString();
-        if (arduino.readString() != null) {
+        if (arduino.readString() == null) {
             //Increment the counter to track the resets
             counter++;
             
             //Iterate through all the boxes
-            for (inti = 0; i < boxes.size(); i++) {
+            for (int i = 0; i < boxes.size(); i++) {
                 
                 //Only shuffle the position on a normal reset
                 boxes.get(i).bx = int(random(width));
@@ -299,6 +299,7 @@ void serialEvent() {
                 //exit();
             }
         }
+        println(arduino.available() + "data: " + arduino.readString());
     }
     
 }
@@ -397,6 +398,7 @@ void draw() {
     image(masterImg, -masterImg.width, 0);
     popMatrix();
     
+    resetButton();
     
     //Physics for Boxes
     for (int i = 0; i < boxes.size(); i++) {
