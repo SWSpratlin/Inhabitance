@@ -167,7 +167,7 @@ void setup() {
     for (int i = 0; i < boxNumber; i++) {
         
         //Temp Boxes, spawn at random places on screen
-        Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 15, 150);
+        Box tmpBox = new Box(int(random(width)), int(random(height)), 15, 15, 0);
         
         //Assign Sounds, dependent on the Array they're pulling from. 
         if (tmpBox.arrayNumber <= 3) {
@@ -410,12 +410,12 @@ void draw() {
     }
     
     //debugging purposes and performance checks
-    fill(255);
-    textSize(20);
-    text(frameRate, 10, 10);
-    strokeWeight(10);
-    stroke(150, 150, 150);
-    line(20, 60, 240, 60);
-    stroke(255);
-    line(20, 60, frameRate * 4, 60);
+    // fill(255);
+    // textSize(20);
+    // text(frameRate, 10, 10);
+    // strokeWeight(10);
+    // stroke(150, 150, 150);
+    // line(20, 60, 240, 60);
+    // stroke(255);
+    // line(20, 60, frameRate * 4, 60);
 }

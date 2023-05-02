@@ -83,7 +83,7 @@ class Box{
         box.loadPixels();
         for (int i = 0; i < box.pixels.length; i++) {
             //Make collision box transparent
-            box.pixels[i] = color(bColor, 255,255,150);
+            box.pixels[i] = color(bColor, 0,0,0);
         }
         //Update Box pixels
         box.updatePixels(); 
