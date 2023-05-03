@@ -30,7 +30,7 @@ ArrayList<String> sounds;
 ArrayList<String> sounds2;
 
 //Number of Boxes to spawn
-int boxNumber = 60;
+int boxNumber = 70;
 
 // Reset Counter to space out sound object creation
 int counter = 0;
@@ -265,7 +265,7 @@ void resetButton() {
                 
                 //If thecounter hits 5, reset the letters and sounds attached to them
                 //you only get 12 of these, so spread them out accordingly
-                if (counter >= 10) {
+                if (counter >= 15) {
                     boxes.get(i).letterNumber = int(random(65, 65 + 24));
                     boxes.get(i).noteNumber =  boxes.get(i).letterNumber - 65;
                     boxes.get(i).letter = char(boxes.get(i).letterNumber);
