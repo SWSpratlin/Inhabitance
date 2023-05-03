@@ -1,6 +1,6 @@
 // Simple Sketch to run a reset button for Inhabitance
 #define SENSORPIN A0
-#define THRESHOLD 600
+#define THRESHOLD 400
 // #define DELAYTIME 250
 
 bool isPressed = false;
@@ -41,10 +41,11 @@ void loop()
         //  catches the changes under a certain threshold.
         // if we meet the reqs, print string CHANGE. This will be fed to Processing
         Serial.write("CHANGE");
-    }
+        delay(100);
+        }
 
     // Add a delay to keep the code from tripping over itself with the if statements
-    delay(200);
+    delay(100);
 
     // Update the last state variable to check itself back later.
     lastSensorState = sensorState;
