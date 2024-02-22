@@ -39,12 +39,13 @@ int counter = 0;
 int numDevices = 0;
 
 void setup() {
+    //fullScreen(P2D, SPAN);
     // Size. Width has to be double the width of a Kinect
     // This lets 2 Kinect feeds populate next to each other
     // Scale by 2 to increase size
-    fullScreen(P2D, SPAN);
+    //fullScreen(P2D, SPAN);
     size(640 * 2,480 * 2, P2D);
-    surface.setLocation(0,0);
+    //surface.setLocation(0,0);
     
     //Sound arrays
     notes = new ArrayList<String>();
@@ -137,7 +138,7 @@ void setup() {
     
     //Initialize Kinect array
     kinect = new Kinect(this);
-    kinect.activateDevice();
+    kinect.activateDevice(0);
     kinect.initDepth();
     
     //Initialize Box Array
@@ -175,7 +176,7 @@ void setup() {
     
     //Initialize Arduino Object with serial Port
     printArray(Serial.list());
-    arduino = new Serial(this, Serial.list()[7], 115200);
+    arduino = new Serial(this, Serial.list()[5], 115200);
 }
 
 //Reset Function, will work out a different physical interface
@@ -245,7 +246,7 @@ void resetButton() {
                 
                 //If thecounter hits 5, reset the letters and sounds attached to them
                 //you only get 12 of these, so spread them out accordingly
-                if (counter >= 15) {
+                if (counter >= 10) {
                     boxes.get(i).letterNumber = int(random(65, 65 + 24));
                     boxes.get(i).noteNumber =  boxes.get(i).letterNumber - 65;
                     boxes.get(i).letter = char(boxes.get(i).letterNumber);
@@ -336,8 +337,6 @@ void draw() {
                 masterImg.pixels[i3] =  color(0);
                 masterImg.pixels[i4] = color(0);
             }
-            //Increment i to cover the i2 variable
-            i++;
             
             /*
             if K has reached the end of a line of pixels in the kinect image (that is being scaled)
@@ -347,6 +346,8 @@ void draw() {
             if (k % kinect.width == 0) {
                 i += masterImg.width;
             }
+            //Increment i to cover the i2 variable
+            i++;
         }
         //Increment K to pull the next index from rawDepth
         k++;
