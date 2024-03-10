@@ -39,11 +39,21 @@ int counter = 0;
 int numDevices = 0;
 
 void setup() {
-    // Size. Width has to be double the width of a Kinect
-    // This lets 2 Kinect feeds populate next to each other
-    // Scale by 2 to increase size
     fullScreen(P2D, SPAN);
-    size(640 * 4,480 * 2, P2D);
+    size(100,100);
+    
+    //KInect initialization
+    numDevices = Kinect.countDevices();
+    println(numDevices);
+    
+    //Count the devices and assign a size in relationship to it.
+    // If there are two cameras, create a widescreen window that will house both.
+    if (numDevices == 1) {
+        windowResize(640 * 2, 480 * 2, P2D);
+    } else if (numDevices == 2) {
+        windowResize(640 * 4, 480 * 2, P2D);
+    }
+    
     surface.setLocation(0,0);
     
     //Sound arrays
@@ -131,15 +141,11 @@ void setup() {
     sounds2.add("Y__3.wav");
     sounds2.add("Z__3.wav");
     
-    //KInect initialization
-    numDevices = Kinect.countDevices();
-    println(numDevices);
-    
     //Initialize Kinect array
     kinects = new ArrayList<Kinect>();
     
     //Iterate through as many Kinects as are connected
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < numDevices; i++) {
         //Initialize object for each Kinect detected
         Kinect tempKinect = new Kinect(this);
         
@@ -328,66 +334,98 @@ void draw() {
     int k = 0;
     int image = 1;
     
-    //Combo Loop
-    for (int i = 0; i < masterImg.pixels.length; i++) {
-        
-        //Set up the current array at the start of the loop
-        if (i ==  0) {
-            image = 0;
+    // run the stitching block if there are 2 cameras. 
+    if (numDevices == 2) {
+        //ComboLoop
+        for (int i = 0; i < masterImg.pixels.length; i++) {
             
-            // Modulus to switch the array every other time. 
-        } else if (i % (kinects.get(image).width * 2) == 0) {
-            
-            // check which array is selected
-            if (image ==  0) {
-                
-                // if it's 0, switch images that we're indexing
-                image = 1;
-                
-                /* Subtract the width of the image from K so K iterates over the same
-                set of numbers twice each time. Use [k] to coontrol each image individually
-                
-                Only has to go back when going to the second image (one on the right) otherwise
-                it can just keep going. */
-                if (k > kinects.get(image).width) {
-                    k -= kinects.get(image).width;
-                }
-                
-            } else {
-                
-                // don't have to reset K when coming back to the first image
+            //Set up the current array at the start of the loop
+            if (i ==  0) {
                 image = 0;
-                i += masterImg.width;
+                
+                // Modulus to switch the array every other time. 
+            } else if (i % (kinects.get(image).width * 2) == 0) {
+                
+                // check which array is selected
+                if (image ==  0) {
+                    
+                    // if it's 0, switch images that we're indexing
+                    image = 1;
+                    
+                    /* Subtract the width of the image from K so K iterates over the same
+                    set of numbers twice each time. Use [k] to coontrol each image individually
+                    
+                    Onlyhas to go back when going to the second image (one on the right) otherwise
+                    it can just keep going. */
+                    if (k > kinects.get(image).width) {
+                        k -= kinects.get(image).width;
+                    }
+                    
+                } else {
+                    
+                    // don't have to reset K when coming back to the first image
+                    image = 0;
+                    i += masterImg.width;
+                }
             }
+            
+            //reset K if it reaches the end prematurely. 
+            //This helps to solve OutOfBounds errors
+            if (k >= currentArray.get(image).length) {
+                k = 0;
+            }
+            
+            int i2 = i + 1;
+            int i3 = i + width;
+            int i4 = i2 + width;
+            //Assign depth values to Master image
+            if (i + masterImg.width + 1 < masterImg.pixels.length) {
+                if (currentArray.get(image)[k] >= minDepth && currentArray.get(image)[k] <= maxDepth) {
+                    masterImg.pixels[i] = color(255);
+                    masterImg.pixels[i2] = color(255);
+                    masterImg.pixels[i3] = color(255);
+                    masterImg.pixels[i4] = color(255);
+                } else {
+                    masterImg.pixels[i] = color(0);
+                    masterImg.pixels[i2] = color(0);
+                    masterImg.pixels[i3] =  color(0);
+                    masterImg.pixels[i4] = color(0);
+                }
+                i++;
+            }
+            //Increment k
+            k++;
         }
         
-        //reset K if it reaches the end prematurely. 
-        //This helps to solve OutOfBounds errors
-        if (k >= currentArray.get(image).length) {
-            k = 0;
-        }
-        
-        int i2 = i + 1;
-        int i3 = i + width;
-        int i4 = i2 + width;
-        //Assign depth values to Master image
-        if (i + masterImg.width + 1 < masterImg.pixels.length) {
-            if (currentArray.get(image)[k] >= minDepth && currentArray.get(image)[k] <= maxDepth) {
-                masterImg.pixels[i] = color(255);
-                masterImg.pixels[i2] = color(255);
-                masterImg.pixels[i3] = color(255);
-                masterImg.pixels[i4] = color(255);
-            } else {
-                masterImg.pixels[i] = color(0);
-                masterImg.pixels[i2] = color(0);
-                masterImg.pixels[i3] =  color(0);
-                masterImg.pixels[i4] = color(0);
+    } else if (numDevices == 1) {
+        //Set Image variable to 0 since the array only has 1 entry
+        image = 0;
+        // Don't run stitching block if there's no second camera. 
+        for (int i = 0; i < masterImg.pixels.length; i++) {
+            
+            int i2 = i + 1;
+            int i3 = i + width;
+            int i4 = i2 + width;
+            //Assign depth values to Master image
+            if (i + masterImg.width + 1 < masterImg.pixels.length) {
+                if (currentArray.get(image)[k] >= minDepth && currentArray.get(image)[k] <= maxDepth) {
+                    masterImg.pixels[i] = color(255);
+                    masterImg.pixels[i2] = color(255);
+                    masterImg.pixels[i3] = color(255);
+                    masterImg.pixels[i4] = color(255);
+                } else {
+                    masterImg.pixels[i] = color(0);
+                    masterImg.pixels[i2] = color(0);
+                    masterImg.pixels[i3] =  color(0);
+                    masterImg.pixels[i4] = color(0);
+                }
+                i++;
             }
-            i++;
+            //Increment k
+            k++;
         }
-        //Increment k
-        k++;
-    }
+    } 
+    
     
     //Update Master Image
     masterImg.updatePixels();
